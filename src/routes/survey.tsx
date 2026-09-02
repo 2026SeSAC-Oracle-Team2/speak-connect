@@ -62,9 +62,10 @@ function SurveyPage() {
                 })}
               </div>
               <div className="mt-2 flex justify-between text-[13px] text-muted-foreground">
-                <span>{SURVEY_SCALE[0].label}</span>
-                <span>{SURVEY_SCALE[4].label}</span>
+                <span>{SURVEY_SCALE[0]?.label}</span>
+                <span>{SURVEY_SCALE[4]?.label}</span>
               </div>
+
             </fieldset>
           </Card>
         ))}
