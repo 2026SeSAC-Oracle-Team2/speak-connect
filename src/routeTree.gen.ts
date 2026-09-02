@@ -12,9 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as RecordsRouteImport } from './routes/records'
+import { Route as ReportRouteImport } from './routes/report'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SurveyRouteImport } from './routes/survey'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
+import { Route as LearnThemeIdRouteImport } from './routes/learn.$themeId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,6 +33,21 @@ const HomeRoute = HomeRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecordsRoute = RecordsRouteImport.update({
+  id: '/records',
+  path: '/records',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -46,21 +65,34 @@ const LearnIndexRoute = LearnIndexRouteImport.update({
   path: '/learn/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnThemeIdRoute = LearnThemeIdRouteImport.update({
+  id: '/learn/$themeId',
+  path: '/learn/$themeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/notifications': typeof NotificationsRoute
+  '/records': typeof RecordsRoute
+  '/report': typeof ReportRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
+  '/learn/$themeId': typeof LearnThemeIdRoute
   '/learn/': typeof LearnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/notifications': typeof NotificationsRoute
+  '/records': typeof RecordsRoute
+  '/report': typeof ReportRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
+  '/learn/$themeId': typeof LearnThemeIdRoute
   '/learn': typeof LearnIndexRoute
 }
 export interface FileRoutesById {
@@ -68,23 +100,50 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
   '/notifications': typeof NotificationsRoute
+  '/records': typeof RecordsRoute
+  '/report': typeof ReportRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
+  '/learn/$themeId': typeof LearnThemeIdRoute
   '/learn/': typeof LearnIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/home' | '/notifications' | '/signup' | '/survey' | '/learn/'
+    | '/'
+    | '/home'
+    | '/notifications'
+    | '/records'
+    | '/report'
+    | '/settings'
+    | '/signup'
+    | '/survey'
+    | '/learn/$themeId'
+    | '/learn/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/notifications' | '/signup' | '/survey' | '/learn'
+  to:
+    | '/'
+    | '/home'
+    | '/notifications'
+    | '/records'
+    | '/report'
+    | '/settings'
+    | '/signup'
+    | '/survey'
+    | '/learn/$themeId'
+    | '/learn'
   id:
     | '__root__'
     | '/'
     | '/home'
     | '/notifications'
+    | '/records'
+    | '/report'
+    | '/settings'
     | '/signup'
     | '/survey'
+    | '/learn/$themeId'
     | '/learn/'
   fileRoutesById: FileRoutesById
 }
@@ -92,8 +151,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
   NotificationsRoute: typeof NotificationsRoute
+  RecordsRoute: typeof RecordsRoute
+  ReportRoute: typeof ReportRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   SurveyRoute: typeof SurveyRoute
+  LearnThemeIdRoute: typeof LearnThemeIdRoute
   LearnIndexRoute: typeof LearnIndexRoute
 }
 
@@ -120,6 +183,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/records': {
+      id: '/records'
+      path: '/records'
+      fullPath: '/records'
+      preLoaderRoute: typeof RecordsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -141,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn/$themeId': {
+      id: '/learn/$themeId'
+      path: '/learn/$themeId'
+      fullPath: '/learn/$themeId'
+      preLoaderRoute: typeof LearnThemeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -148,8 +239,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
   NotificationsRoute: NotificationsRoute,
+  RecordsRoute: RecordsRoute,
+  ReportRoute: ReportRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   SurveyRoute: SurveyRoute,
+  LearnThemeIdRoute: LearnThemeIdRoute,
   LearnIndexRoute: LearnIndexRoute,
 }
 export const routeTree = rootRouteImport
