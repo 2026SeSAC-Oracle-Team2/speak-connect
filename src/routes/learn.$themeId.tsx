@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Btn, Card, DuckSays, Loading, ProgressBar, Screen } from "@/components/app/ui";
+import { ChatStep } from "@/components/app/ChatStep";
 import {
   SESSIONS,
   SESSION_TITLE,
