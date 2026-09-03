@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, DuckSays, Screen } from "@/components/app/ui";
 import { BottomNav } from "@/components/app/BottomNav";
 import { Play, Flame, TrendingUp, ChevronRight } from "lucide-react";
+import duck from "@/assets/duck.png";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
