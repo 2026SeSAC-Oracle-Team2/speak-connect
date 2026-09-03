@@ -45,6 +45,7 @@ function ProfilePage() {
   const [nickname, setNickname] = useState("덕분님");
   const [draft, setDraft] = useState(nickname);
   const [editing, setEditing] = useState(false);
+  const [time, setTime] = useState("10:00");
 
   function saveNickname() {
     const next = draft.trim();
@@ -126,9 +127,17 @@ function ProfilePage() {
         <Card className="divide-y divide-border py-1">
           <Toggle label="푸시 알림" desc="오늘의 덕담, 주간 요약을 보내드려요." />
           <Toggle label="연습 알림" desc="정하신 시간에 부담 없이 알려드려요." />
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between gap-4 py-3">
             <p className="text-[16px] font-semibold">알림 시간 설정</p>
-            <p className="text-[16px] font-semibold text-accent">오전 10:00</p>
+            <label className="flex items-center gap-2 rounded-xl border border-input bg-background px-3 py-1.5">
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                aria-label="알림 시간 선택"
+                className="bg-transparent text-[16px] font-semibold text-accent outline-none"
+              />
+            </label>
           </div>
         </Card>
 
