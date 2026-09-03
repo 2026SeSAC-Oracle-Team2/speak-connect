@@ -88,8 +88,8 @@ function SignupPage() {
           />
         </div>
 
-
         <fieldset className="space-y-2">
+
           <legend className="mb-2 text-[15px] font-semibold">성별</legend>
           <div className="flex gap-3">
             {["여성", "남성", "선택 안 함"].map((g) => (
