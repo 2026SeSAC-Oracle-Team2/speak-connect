@@ -1,9 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, DuckSays, Screen } from "@/components/app/ui";
 import { BottomNav } from "@/components/app/BottomNav";
-import { THEMES } from "@/lib/learning";
-import cafe from "@/assets/cafe_1.jpg";
-import { Play, Flame, TrendingUp, ChevronRight, Clock } from "lucide-react";
+import { Play, Flame, TrendingUp, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
@@ -90,37 +88,6 @@ function HomePage() {
           ))}
         </ul>
 
-        <h2 className="mb-3 mt-7 text-[17px] font-bold">테마별 학습</h2>
-        <ul className="space-y-4">
-          {THEMES.map((t) => (
-            <li key={t.id}>
-              <Link
-                to="/learn/$themeId"
-                params={{ themeId: t.id }}
-                className="card-soft block overflow-hidden p-0"
-              >
-                <img
-                  src={cafe}
-                  alt={`${t.title} 테마 이미지`}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
-                  className="h-36 w-full object-cover"
-                />
-                <div className="flex items-center justify-between p-4">
-                  <div>
-                    <h3 className="text-[17px] font-bold">{t.title}</h3>
-                    <p className="mt-1 text-[14px] text-muted-foreground">{t.subtitle}</p>
-                  </div>
-                  <span className="flex items-center gap-1 text-[14px] text-muted-foreground">
-                    <Clock size={16} strokeWidth={2.2} aria-hidden />
-                    {t.minutes}분
-                  </span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
       </Screen>
       <BottomNav />
     </>
