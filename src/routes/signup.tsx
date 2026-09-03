@@ -76,7 +76,7 @@ function SignupPage() {
 
         <div className="space-y-2">
           <label htmlFor="name" className="block text-[15px] font-semibold">
-            이름
+            이름/닉네임
           </label>
           <input
             id="name"
@@ -89,6 +89,7 @@ function SignupPage() {
         </div>
 
         <fieldset className="space-y-2">
+
           <legend className="mb-2 text-[15px] font-semibold">성별</legend>
           <div className="flex gap-3">
             {["여성", "남성", "선택 안 함"].map((g) => (
@@ -104,13 +105,14 @@ function SignupPage() {
         </fieldset>
 
         <div className="space-y-2">
-          <label htmlFor="age" className="block text-[15px] font-semibold">
-            나이
+          <label htmlFor="birth" className="block text-[15px] font-semibold">
+            생년월일
           </label>
-          <input id="age" type="number" min={1} max={120} className={field} placeholder="예) 62" required />
+          <input id="birth" type="date" className={field} required />
         </div>
 
         <div className="space-y-2">
+
           <label htmlFor="hobby" className="block text-[15px] font-semibold">
             취미
           </label>
