@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RecordsRouteImport } from './routes/records'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -18,6 +19,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SurveyRouteImport } from './routes/survey'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnThemeIdRouteImport } from './routes/learn.$themeId'
+import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecordsRoute = RecordsRouteImport.update({
@@ -64,39 +71,50 @@ const LearnThemeIdRoute = LearnThemeIdRouteImport.update({
   path: '/learn/$themeId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileEditRoute = ProfileEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => ProfileRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
   '/learn/$themeId': typeof LearnThemeIdRoute
+  '/profile/edit': typeof ProfileEditRoute
   '/learn/': typeof LearnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
   '/learn/$themeId': typeof LearnThemeIdRoute
+  '/profile/edit': typeof ProfileEditRoute
   '/learn': typeof LearnIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
   '/learn/$themeId': typeof LearnThemeIdRoute
+  '/profile/edit': typeof ProfileEditRoute
   '/learn/': typeof LearnIndexRoute
 }
 export interface FileRouteTypes {
@@ -104,40 +122,47 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/home'
+    | '/profile'
     | '/records'
     | '/report'
     | '/settings'
     | '/signup'
     | '/survey'
     | '/learn/$themeId'
+    | '/profile/edit'
     | '/learn/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/home'
+    | '/profile'
     | '/records'
     | '/report'
     | '/settings'
     | '/signup'
     | '/survey'
     | '/learn/$themeId'
+    | '/profile/edit'
     | '/learn'
   id:
     | '__root__'
     | '/'
     | '/home'
+    | '/profile'
     | '/records'
     | '/report'
     | '/settings'
     | '/signup'
     | '/survey'
     | '/learn/$themeId'
+    | '/profile/edit'
     | '/learn/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   RecordsRoute: typeof RecordsRoute
   ReportRoute: typeof ReportRoute
   SettingsRoute: typeof SettingsRoute
@@ -161,6 +186,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/records': {
@@ -212,12 +244,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnThemeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/edit': {
+      id: '/profile/edit'
+      path: '/edit'
+      fullPath: '/profile/edit'
+      preLoaderRoute: typeof ProfileEditRouteImport
+      parentRoute: typeof ProfileRoute
+    }
   }
 }
+
+interface ProfileRouteChildren {
+  ProfileEditRoute: typeof ProfileEditRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileEditRoute: ProfileEditRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   RecordsRoute: RecordsRoute,
   ReportRoute: ReportRoute,
   SettingsRoute: SettingsRoute,
