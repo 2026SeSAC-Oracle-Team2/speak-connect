@@ -2,7 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Btn, Card, DuckSays, PageTitle, Screen } from "@/components/app/ui";
 import { INTEREST_TAGS } from "@/lib/learning";
-import { Check } from "lucide-react";
+import { Camera, Check } from "lucide-react";
+import duck from "@/assets/duck.png";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
