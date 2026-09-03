@@ -32,7 +32,7 @@ function HomePage() {
           <h1 className="mt-1 text-2xl font-bold tracking-tight">덕분님, 오늘도 반가워요</h1>
         </header>
 
-        <DuckSays>오늘도 한마디씩, 덕담과 함께 말해봐요.</DuckSays>
+        <DuckSays>같이 오늘의 학습을 해볼까요? 꽥꽥꽥</DuckSays>
 
         <div className="mt-5 grid grid-cols-2 gap-3">
           <Card className="p-4">
