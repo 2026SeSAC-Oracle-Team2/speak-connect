@@ -89,7 +89,7 @@ function HomePage() {
           ))}
         </ul>
 
-        <div className="absolute bottom-6 right-5 z-10 flex flex-col items-center gap-2">
+        <div className="absolute bottom-14 right-5 z-30 flex flex-col items-center gap-2">
           <div className="relative card-soft rounded-2xl px-4 py-2.5 text-[14px] font-semibold text-foreground shadow-[var(--shadow-card)]">
             덕분이와 함께 대화해요
             <span
