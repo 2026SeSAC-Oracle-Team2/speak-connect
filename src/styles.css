@@ -130,6 +130,8 @@
   --color-success-foreground: var(--success-foreground);
   --color-brand-ivory: var(--brand-ivory);
   --color-brand-yellow: var(--brand-yellow);
+  --color-brand-yellow-light: var(--brand-yellow-light);
+  --color-brand-yellow-dark: var(--brand-yellow-dark);
   --color-brand-brown: var(--brand-brown);
 }
 
