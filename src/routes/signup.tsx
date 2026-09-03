@@ -121,22 +121,26 @@ function SignupPage() {
           <div>
             <h2 className="text-[15px] font-semibold">관심사 태그</h2>
             <p className="mt-1 text-[14px] text-muted-foreground">
-              고르신 만큼 대화 주제가 가까워져요. ({tags.length}개 선택)
+              5개를 골라주세요. ({tags.length}/5)
             </p>
           </div>
           <ul className="flex flex-wrap gap-2">
             {INTEREST_TAGS.map((t) => {
               const on = tags.includes(t);
+              const full = tags.length >= 5 && !on;
               return (
                 <li key={t}>
                   <button
                     type="button"
                     aria-pressed={on}
+                    disabled={full}
                     onClick={() => toggle(t)}
                     className={`flex min-h-[44px] items-center gap-1.5 rounded-full border-2 px-4 text-[15px] transition-colors ${
                       on
                         ? "border-primary bg-[image:var(--gradient-brand)] font-semibold text-primary-foreground"
-                        : "border-border bg-card text-foreground"
+                        : full
+                          ? "border-border bg-muted text-muted-foreground cursor-not-allowed"
+                          : "border-border bg-card text-foreground"
                     }`}
                   >
                     {on ? <Check size={16} strokeWidth={2.5} aria-hidden /> : null}
@@ -148,9 +152,10 @@ function SignupPage() {
           </ul>
         </Card>
 
-        <Btn full type="submit">
+        <Btn full type="submit" disabled={tags.length !== 5}>
           다음으로
         </Btn>
+
       </form>
     </Screen>
   );
