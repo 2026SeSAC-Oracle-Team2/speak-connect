@@ -52,21 +52,6 @@ function LearnPage() {
           ))}
         </ul>
 
-        <Card className="mt-6">
-          <h2 className="text-[16px] font-bold">한 세션 구성</h2>
-          <ul className="mt-3 space-y-2 text-[15px] text-muted-foreground">
-            {(["listen", "naming", "repeat", "spontaneous"] as const).map((k) => (
-              <li key={k} className="flex justify-between">
-                <span>{STEP_LABEL[k]}</span>
-                <span className="font-semibold text-foreground">2개</span>
-              </li>
-            ))}
-            <li className="flex justify-between">
-              <span>AI 대화</span>
-              <span className="font-semibold text-foreground">4턴</span>
-            </li>
-          </ul>
-        </Card>
       </Screen>
       <BottomNav />
     </>
