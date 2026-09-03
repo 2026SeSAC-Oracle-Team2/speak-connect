@@ -10,7 +10,7 @@ export function Screen({
   className?: string;
 }) {
   return (
-    <main className={cn("mx-auto min-h-dvh w-full max-w-md surface-warm px-5 pb-28 pt-6", className)}>
+    <main className={cn("relative mx-auto min-h-dvh w-full max-w-md surface-warm px-5 pb-28 pt-6", className)}>
       {children}
     </main>
   );
