@@ -44,6 +44,9 @@ function RecordsPage() {
     <>
       <Screen>
         <PageTitle title="학습 기록" desc="조금씩 쌓인 연습을 살펴보세요." />
+        <p className="mb-4 rounded-2xl bg-secondary px-4 py-3 text-[15px] text-foreground">
+          AI 대화: 최근 대화에서 대답이 한층 또렷해지셨어요.
+        </p>
 
         <Card>
           <div className="flex items-baseline justify-between">

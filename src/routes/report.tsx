@@ -40,6 +40,9 @@ function ReportPage() {
     <Screen className="pb-12">
       <PageTitle title="오늘의 보고서" desc="차분히 살펴보시면 돼요." />
       <DuckSays>오늘도 끝까지 함께해 주셔서 고맙습니다.</DuckSays>
+      <p className="mt-3 rounded-2xl bg-secondary px-4 py-3 text-[15px] text-foreground">
+        AI 대화: 덕분이와의 대화에서 말문이 편하게 트이셨어요.
+      </p>
 
       <Card className="mt-5">
         <div className="flex items-baseline justify-between">
