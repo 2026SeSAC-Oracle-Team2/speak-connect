@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HomeRouteImport } from './routes/home'
-import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as RecordsRouteImport } from './routes/records'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -28,11 +27,6 @@ const IndexRoute = IndexRouteImport.update({
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecordsRoute = RecordsRouteImport.update({
@@ -74,7 +68,6 @@ const LearnThemeIdRoute = LearnThemeIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/notifications': typeof NotificationsRoute
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
@@ -86,7 +79,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/notifications': typeof NotificationsRoute
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
@@ -99,7 +91,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/notifications': typeof NotificationsRoute
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
@@ -113,7 +104,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/home'
-    | '/notifications'
     | '/records'
     | '/report'
     | '/settings'
@@ -125,7 +115,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/home'
-    | '/notifications'
     | '/records'
     | '/report'
     | '/settings'
@@ -137,7 +126,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/home'
-    | '/notifications'
     | '/records'
     | '/report'
     | '/settings'
@@ -150,7 +138,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
-  NotificationsRoute: typeof NotificationsRoute
   RecordsRoute: typeof RecordsRoute
   ReportRoute: typeof ReportRoute
   SettingsRoute: typeof SettingsRoute
@@ -174,13 +161,6 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/records': {
@@ -238,7 +218,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
-  NotificationsRoute: NotificationsRoute,
   RecordsRoute: RecordsRoute,
   ReportRoute: ReportRoute,
   SettingsRoute: SettingsRoute,
