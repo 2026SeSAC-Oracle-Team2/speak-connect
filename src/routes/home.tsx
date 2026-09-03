@@ -62,7 +62,7 @@ function HomePage() {
             </span>
           </div>
           <p className="text-[15px] text-muted-foreground">
-            알아듣기 2 · 이름대기 2 · 따라말하기 2 · 자발화 2 · AI 대화 4
+            {"\n"}
           </p>
           <Link
             to="/learn/$themeId"
