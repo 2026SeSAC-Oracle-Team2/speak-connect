@@ -76,7 +76,7 @@ function SignupPage() {
 
         <div className="space-y-2">
           <label htmlFor="name" className="block text-[15px] font-semibold">
-            이름
+            이름/닉네임
           </label>
           <input
             id="name"
@@ -87,6 +87,7 @@ function SignupPage() {
             required
           />
         </div>
+
 
         <fieldset className="space-y-2">
           <legend className="mb-2 text-[15px] font-semibold">성별</legend>
