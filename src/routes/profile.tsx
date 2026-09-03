@@ -45,6 +45,7 @@ function ProfilePage() {
   const [nickname, setNickname] = useState("덕분님");
   const [draft, setDraft] = useState(nickname);
   const [editing, setEditing] = useState(false);
+  const [time, setTime] = useState("10:00");
 
   function saveNickname() {
     const next = draft.trim();
