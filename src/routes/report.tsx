@@ -25,7 +25,7 @@ export const Route = createFileRoute("/report")({
 const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, naming: 9 };
 
 const rows = [
-  { key: "자발화", score: scores.spontaneous, max: 20, note: "문장을 길게 이어 말씀하셨어요." },
+  { key: "자발화", score: scores.spontaneous, max: 20, note: "문장의 핵심을 잘 파악했어요." },
   { key: "이해력", score: scores.comprehension, max: 10, note: "두 번 들으면 더 또렷해져요." },
   { key: "따라말하기", score: scores.repetition, max: 10, note: "긴 문장에서 잠시 쉬어가면 좋아요." },
   { key: "이름대기", score: scores.naming, max: 10, note: "사물 이름을 빠르게 떠올리셨어요." },
