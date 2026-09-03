@@ -33,6 +33,7 @@ export const SURVEY_SCALE = [
 ];
 
 export type ThemeId = "cafe" | "hospital";
+export type SessionId = ThemeId | "daily";
 
 export const THEMES: {
   id: ThemeId;
@@ -40,9 +41,16 @@ export const THEMES: {
   subtitle: string;
   minutes: number;
 }[] = [
-  { id: "cafe", title: "동네 카페에서", subtitle: "주문하고 이야기 나누기", minutes: 8 },
+  { id: "cafe", title: "카페에서 주문하기", subtitle: "음료 고르고 주문해 보기", minutes: 8 },
   { id: "hospital", title: "병원에서 진료받기", subtitle: "접수하고 증상 말하기", minutes: 8 },
 ];
+
+export const DAILY = {
+  id: "daily" as const,
+  title: "오늘의 학습",
+  subtitle: "여러 상황을 섞어 12문항",
+  minutes: 8,
+};
 
 export type StepKind = "listen" | "naming" | "repeat" | "spontaneous" | "chat";
 
@@ -55,75 +63,198 @@ export const STEP_LABEL: Record<StepKind, string> = {
 };
 
 export type SessionStep =
-  | { kind: "listen"; prompt: string; audioText: string; options: [string, string]; answer: 0 | 1 }
-  | { kind: "naming"; prompt: string; hint: string; answer: string }
-  | { kind: "repeat"; sentence: string }
-  | { kind: "spontaneous"; prompt: string }
-  | { kind: "chat"; turns: string[] };
+  | {
+      kind: "listen";
+      title: string;
+      prompt: string;
+      audioText: string;
+      options: [string, string];
+      answer: 0 | 1;
+    }
+  | { kind: "naming"; title: string; prompt: string; hint: string; answer: string }
+  | { kind: "repeat"; title: string; sentence: string }
+  | { kind: "spontaneous"; title: string; prompt: string }
+  | { kind: "chat"; title: string; turns: string[]; minTurns: number; maxTurns: number };
 
-export const SESSIONS: Record<ThemeId, SessionStep[]> = {
-  cafe: [
-    {
-      kind: "listen",
-      prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
-      audioText: "따뜻한 커피 한 잔 주세요.",
-      options: ["따뜻한 커피를 주문했어요", "차가운 주스를 주문했어요"],
-      answer: 0,
-    },
-    {
-      kind: "listen",
-      prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
-      audioText: "창가 자리에 앉을게요.",
-      options: ["문 앞에 서 있어요", "창가 자리에 앉아요"],
-      answer: 1,
-    },
-    { kind: "naming", prompt: "사진 속 장소의 이름을 말씀해 주세요.", hint: "커피를 마시는 곳이에요", answer: "카페" },
-    { kind: "naming", prompt: "사진 속 물건의 이름을 말씀해 주세요.", hint: "받침 위에 놓인 잔이에요", answer: "커피잔" },
-    { kind: "repeat", sentence: "커피 한 잔 부탁드립니다." },
-    { kind: "repeat", sentence: "창가 자리에 앉아도 될까요?" },
-    { kind: "spontaneous", prompt: "카페에서 커피를 주문하는 장면을 말씀해 주세요." },
-    { kind: "spontaneous", prompt: "좋아하시는 음료와 그 이유를 들려주세요." },
-    {
-      kind: "chat",
-      turns: [
-        "오늘 카페에 오셨네요. 어떤 음료가 마시고 싶으세요?",
-        "좋은 선택이에요. 따뜻하게 드릴까요, 차갑게 드릴까요?",
-        "자리는 창가와 안쪽 중 어디가 편하실까요?",
-        "편안한 시간 보내세요. 오늘 이야기 나눠 주셔서 고맙습니다.",
-      ],
-    },
+/** AI 대화는 4문항으로 계산합니다. */
+export function stepWeight(step: SessionStep) {
+  return step.kind === "chat" ? 4 : 1;
+}
+
+export function totalItems(steps: SessionStep[]) {
+  return steps.reduce((n, s) => n + stepWeight(s), 0);
+}
+
+const cafeChat: SessionStep = {
+  kind: "chat",
+  title: "카페 이야기 나누기",
+  minTurns: 4,
+  maxTurns: 8,
+  turns: [
+    "오늘은 어떤 음료를 주문하셨어요?",
+    "그 음료는 어떤 맛인가요?",
+    "카페에서는 주로 무엇을 하며 시간을 보내세요?",
+    "오늘 카페에서 기분은 어떠셨어요?",
+    "다음에 또 마셔보고 싶은 음료가 있으세요?",
+    "함께 가고 싶은 분이 있으신가요?",
+    "카페에서 앉기 좋은 자리는 어디였나요?",
+    "오늘 이야기 나눠 주셔서 고맙습니다. 마무리해도 될까요?",
   ],
-  hospital: [
-    {
-      kind: "listen",
-      prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
-      audioText: "진료 접수를 하러 왔어요.",
-      options: ["진료를 접수하러 왔어요", "약을 사러 왔어요"],
-      answer: 0,
-    },
-    {
-      kind: "listen",
-      prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
-      audioText: "어제부터 목이 아팠어요.",
-      options: ["다리를 다쳤어요", "어제부터 목이 아팠어요"],
-      answer: 1,
-    },
-    { kind: "naming", prompt: "사진 속 장소의 이름을 말씀해 주세요.", hint: "진료를 받는 곳이에요", answer: "병원" },
-    { kind: "naming", prompt: "사진 속 물건의 이름을 말씀해 주세요.", hint: "몸의 열을 재는 물건이에요", answer: "체온계" },
-    { kind: "repeat", sentence: "진료 접수 부탁드립니다." },
-    { kind: "repeat", sentence: "어제부터 목이 아팠습니다." },
-    { kind: "spontaneous", prompt: "병원에서 접수하는 장면을 말씀해 주세요." },
-    { kind: "spontaneous", prompt: "요즘 몸 상태가 어떠신지 들려주세요." },
-    {
-      kind: "chat",
-      turns: [
-        "병원에 오셨네요. 어디가 불편하셔서 오셨어요?",
-        "언제부터 그러셨는지 말씀해 주시겠어요?",
-        "지금 드시고 계신 약이 있으실까요?",
-        "곧 진료 시작할게요. 오늘 이야기 나눠 주셔서 고맙습니다.",
-      ],
-    },
+};
+
+const hospitalChat: SessionStep = {
+  kind: "chat",
+  title: "진료 이야기 나누기",
+  minTurns: 4,
+  maxTurns: 8,
+  turns: [
+    "오늘은 어디가 불편해서 오셨어요?",
+    "언제부터 그러셨는지 말씀해 주시겠어요?",
+    "지금 드시고 계신 약이 있으실까요?",
+    "요즘 잠은 잘 주무세요?",
+    "식사는 어떻게 하고 계세요?",
+    "병원에 오실 때는 어떻게 오셨어요?",
+    "다음 진료는 언제로 하면 좋을까요?",
+    "오늘 이야기 나눠 주셔서 고맙습니다. 마무리해도 될까요?",
   ],
+};
+
+const cafe: SessionStep[] = [
+  {
+    kind: "naming",
+    title: "음료 이름 찾기",
+    prompt: "사진 속 음료의 이름을 말씀해 주세요.",
+    hint: "원두를 내려 만든 따뜻한 음료예요",
+    answer: "커피",
+  },
+  {
+    kind: "listen",
+    title: "음료 특징 이해",
+    prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
+    audioText: "이 음료는 우유를 넣어 부드러워요.",
+    options: ["우유를 넣어 부드러워요", "얼음만 넣은 음료예요"],
+    answer: 0,
+  },
+  {
+    kind: "listen",
+    title: "주문할 음료 찾기",
+    prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
+    audioText: "따뜻한 커피 한 잔 주세요.",
+    options: ["차가운 주스를 주문했어요", "따뜻한 커피를 주문했어요"],
+    answer: 1,
+  },
+  { kind: "repeat", title: "주문 표현 따라하기", sentence: "따뜻한 커피 한 잔 주세요." },
+  { kind: "spontaneous", title: "직접 주문하기", prompt: "카페에서 음료를 주문해 보세요." },
+  { kind: "repeat", title: "주문 확인에 응답하기", sentence: "네, 여기서 마시고 갈게요." },
+  {
+    kind: "naming",
+    title: "카페에서 사용하는 물건 찾기",
+    prompt: "사진 속 물건의 이름을 말씀해 주세요.",
+    hint: "받침 위에 놓인 잔이에요",
+    answer: "커피잔",
+  },
+  { kind: "spontaneous", title: "음료 받는 상황 설명하기", prompt: "음료를 받는 장면을 설명해 주세요." },
+  cafeChat,
+];
+
+const hospital: SessionStep[] = [
+  {
+    kind: "naming",
+    title: "진료 장소 이름 찾기",
+    prompt: "사진 속 장소의 이름을 말씀해 주세요.",
+    hint: "진료를 받는 곳이에요",
+    answer: "병원",
+  },
+  {
+    kind: "listen",
+    title: "접수 안내 이해",
+    prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
+    audioText: "이름과 생년월일을 말씀해 주세요.",
+    options: ["이름과 생년월일을 물어봤어요", "진료비를 물어봤어요"],
+    answer: 0,
+  },
+  {
+    kind: "listen",
+    title: "내 증상 고르기",
+    prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
+    audioText: "어제부터 목이 아팠어요.",
+    options: ["다리를 다쳤어요", "어제부터 목이 아팠어요"],
+    answer: 1,
+  },
+  { kind: "repeat", title: "접수 표현 따라하기", sentence: "진료 접수 부탁드립니다." },
+  { kind: "spontaneous", title: "직접 접수하기", prompt: "접수 창구에서 접수해 보세요." },
+  { kind: "repeat", title: "진료 확인에 응답하기", sentence: "네, 이쪽에서 기다리겠습니다." },
+  {
+    kind: "naming",
+    title: "병원에서 사용하는 물건 찾기",
+    prompt: "사진 속 물건의 이름을 말씀해 주세요.",
+    hint: "몸의 열을 재는 물건이에요",
+    answer: "체온계",
+  },
+  { kind: "spontaneous", title: "진료받는 상황 설명하기", prompt: "진료실에서의 장면을 설명해 주세요." },
+  hospitalChat,
+];
+
+/** 오늘의 학습: 테마와 달리 이야기가 이어지지 않고 유형별 문항이 섞여 나옵니다. */
+const daily: SessionStep[] = [
+  {
+    kind: "listen",
+    title: "알아듣기",
+    prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
+    audioText: "오늘은 비가 와서 우산을 챙겼어요.",
+    options: ["우산을 챙겼어요", "모자를 챙겼어요"],
+    answer: 0,
+  },
+  {
+    kind: "naming",
+    title: "이름대기",
+    prompt: "사진 속 물건의 이름을 말씀해 주세요.",
+    hint: "비 올 때 쓰는 물건이에요",
+    answer: "우산",
+  },
+  { kind: "repeat", title: "따라말하기", sentence: "오늘 날씨가 참 좋습니다." },
+  { kind: "spontaneous", title: "자발화", prompt: "오늘 아침에 하신 일을 말씀해 주세요." },
+  {
+    kind: "listen",
+    title: "알아듣기",
+    prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
+    audioText: "시장에서 사과를 두 개 샀어요.",
+    options: ["배를 세 개 샀어요", "사과를 두 개 샀어요"],
+    answer: 1,
+  },
+  {
+    kind: "naming",
+    title: "이름대기",
+    prompt: "사진 속 물건의 이름을 말씀해 주세요.",
+    hint: "빨갛고 아삭한 과일이에요",
+    answer: "사과",
+  },
+  { kind: "repeat", title: "따라말하기", sentence: "가까운 곳에 잠시 다녀왔습니다." },
+  { kind: "spontaneous", title: "자발화", prompt: "사진 속 장면을 설명해 주세요." },
+  {
+    kind: "chat",
+    title: "AI 대화",
+    minTurns: 4,
+    maxTurns: 8,
+    turns: [
+      "오늘 하루는 어떻게 보내셨어요?",
+      "그중에서 가장 기억에 남는 일은 무엇이었나요?",
+      "함께한 분이 있으셨어요?",
+      "내일은 어떤 하루를 보내고 싶으세요?",
+      "요즘 자주 하시는 일이 있으세요?",
+      "그 일은 어떤 점이 좋으세요?",
+      "다음에 해보고 싶은 일이 있으신가요?",
+      "오늘 이야기 나눠 주셔서 고맙습니다. 마무리해도 될까요?",
+    ],
+  },
+];
+
+export const SESSIONS: Record<SessionId, SessionStep[]> = { cafe, hospital, daily };
+
+export const SESSION_TITLE: Record<SessionId, string> = {
+  cafe: "카페에서 주문하기",
+  hospital: "병원에서 진료받기",
+  daily: "오늘의 학습",
 };
 
 export type Scores = {

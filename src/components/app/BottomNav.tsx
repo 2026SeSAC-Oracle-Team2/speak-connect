@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { House, GraduationCap, ChartLine, Settings } from "lucide-react";
+import { House, GraduationCap, ChartLine, User } from "lucide-react";
 
 const items = [
   { to: "/home", label: "홈", Icon: House },
   { to: "/learn", label: "학습", Icon: GraduationCap },
   { to: "/records", label: "기록", Icon: ChartLine },
-  { to: "/settings", label: "설정", Icon: Settings },
+  { to: "/profile", label: "프로필", Icon: User },
 ] as const;
 
 export function BottomNav() {
