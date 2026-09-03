@@ -98,8 +98,7 @@ function HomePage() {
             />
           </div>
           <Link
-            to="/learn/$themeId"
-            params={{ themeId: "daily" }}
+            to="/chat"
             aria-label="덕분이와 대화 시작하기"
             className="grid size-20 place-items-center overflow-hidden rounded-full border-4 border-brand-yellow-light bg-gradient-to-b from-brand-yellow-light to-brand-yellow-dark shadow-[var(--shadow-fab)] transition-all active:scale-[0.96] active:shadow-[var(--shadow-fab-active)]"
           >
