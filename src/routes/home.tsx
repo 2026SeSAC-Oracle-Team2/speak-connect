@@ -89,21 +89,21 @@ function HomePage() {
           ))}
         </ul>
 
-        <div className="absolute bottom-14 right-5 z-30 flex flex-col items-center gap-2">
-          <div className="relative card-soft rounded-2xl px-4 py-2.5 text-[14px] font-semibold text-foreground shadow-[var(--shadow-card)]">
+        <div className="absolute bottom-20 right-5 z-30 flex flex-col items-center gap-2">
+          <div className="relative rounded-2xl bg-brand-yellow px-4 py-2.5 text-[14px] font-bold text-primary-foreground shadow-[var(--shadow-card)]">
             덕분이와 함께 대화해요
             <span
               aria-hidden
-              className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 border-b border-r border-border bg-card"
+              className="absolute -bottom-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-brand-yellow"
             />
           </div>
           <Link
             to="/learn/$themeId"
             params={{ themeId: "daily" }}
             aria-label="덕분이와 대화 시작하기"
-            className="grid size-16 place-items-center overflow-hidden rounded-full border-4 border-primary bg-white shadow-[var(--shadow-card)] transition-transform active:scale-[0.96]"
+            className="grid size-20 place-items-center overflow-hidden rounded-full border-4 border-brand-yellow bg-brand-yellow shadow-[var(--shadow-card)] transition-transform active:scale-[0.96]"
           >
-            <img src={duck} alt="덕분이" className="size-12 object-contain" />
+            <img src={duck} alt="덕분이" className="size-14 object-contain" />
           </Link>
         </div>
       </Screen>
