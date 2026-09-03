@@ -27,7 +27,12 @@ function SignupPage() {
   const [photo, setPhoto] = useState<string | null>(null);
 
   const toggle = (t: string) =>
-    setTags((p) => (p.includes(t) ? p.filter((x) => x !== t) : [...p, t]));
+    setTags((p) => {
+      if (p.includes(t)) return p.filter((x) => x !== t);
+      if (p.length >= 5) return p;
+      return [...p, t];
+    });
+
 
   return (
     <Screen>
