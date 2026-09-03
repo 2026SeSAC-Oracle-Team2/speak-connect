@@ -32,7 +32,7 @@ export const SURVEY_SCALE = [
   { value: 5, label: "아주 편해요" },
 ];
 
-export type ThemeId = "cafe" | "market";
+export type ThemeId = "cafe" | "hospital";
 
 export const THEMES: {
   id: ThemeId;
@@ -41,7 +41,7 @@ export const THEMES: {
   minutes: number;
 }[] = [
   { id: "cafe", title: "동네 카페에서", subtitle: "주문하고 이야기 나누기", minutes: 8 },
-  { id: "market", title: "시장 가는 길", subtitle: "장보고 인사 나누기", minutes: 8 },
+  { id: "hospital", title: "병원에서 진료받기", subtitle: "접수하고 증상 말하기", minutes: 8 },
 ];
 
 export type StepKind = "listen" | "naming" | "repeat" | "spontaneous" | "chat";
@@ -93,7 +93,7 @@ export const SESSIONS: Record<ThemeId, SessionStep[]> = {
       ],
     },
   ],
-  market: [
+  hospital: [
     {
       kind: "listen",
       prompt: "들려드린 문장에 맞는 답을 골라 주세요.",
