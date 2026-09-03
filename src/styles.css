@@ -97,6 +97,8 @@
 
   --brand-ivory: oklch(0.965 0.02 92);
   --brand-yellow: oklch(0.86 0.17 88);
+  --brand-yellow-light: oklch(0.9 0.16 88);
+  --brand-yellow-dark: oklch(0.8 0.17 84);
   --brand-brown: oklch(0.48 0.075 58);
 
   --chart-1: oklch(0.83 0.16 84);
@@ -107,8 +109,11 @@
 
   --gradient-warm: linear-gradient(160deg, oklch(0.98 0.03 95), oklch(0.94 0.06 88));
   --gradient-brand: linear-gradient(135deg, oklch(0.88 0.15 92), oklch(0.8 0.16 76));
+  --gradient-fab: linear-gradient(180deg, var(--brand-yellow-light), var(--brand-yellow-dark));
   --shadow-soft: 0 6px 20px -8px oklch(0.48 0.075 58 / 0.28);
   --shadow-card: 0 10px 30px -14px oklch(0.48 0.075 58 / 0.35);
+  --shadow-fab: 0 10px 28px -6px oklch(0.48 0.075 58 / 0.45), 0 4px 10px -4px oklch(0.48 0.075 58 / 0.35), inset 0 -3px 8px -4px oklch(0.48 0.075 58 / 0.25);
+  --shadow-fab-active: 0 6px 16px -6px oklch(0.48 0.075 58 / 0.4);
 
   --sidebar: oklch(0.985 0.012 92);
   --sidebar-foreground: oklch(0.31 0.045 62);
