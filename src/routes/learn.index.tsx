@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Card, DuckSays, PageTitle, Screen } from "@/components/app/ui";
+import { DuckSays, PageTitle, Screen } from "@/components/app/ui";
 import { BottomNav } from "@/components/app/BottomNav";
-import { THEMES, STEP_LABEL } from "@/lib/learning";
+import { THEMES } from "@/lib/learning";
 import cafe from "@/assets/cafe_1.jpg";
 import { ChevronRight } from "lucide-react";
 
