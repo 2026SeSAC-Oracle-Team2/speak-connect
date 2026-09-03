@@ -105,11 +105,12 @@ function SignupPage() {
         </fieldset>
 
         <div className="space-y-2">
-          <label htmlFor="age" className="block text-[15px] font-semibold">
-            나이
+          <label htmlFor="birth" className="block text-[15px] font-semibold">
+            생년월일
           </label>
-          <input id="age" type="number" min={1} max={120} className={field} placeholder="예) 62" required />
+          <input id="birth" type="date" className={field} required />
         </div>
+
 
         <div className="space-y-2">
           <label htmlFor="hobby" className="block text-[15px] font-semibold">
