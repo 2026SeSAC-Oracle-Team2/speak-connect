@@ -1,14 +1,106 @@
-# Welcome to your Lovable project
+# Speak & Connect
+
+모바일 화면 만들어줘
+
+1. Target
+
+Primary Target
+
+실어증 환자 전 연령층
+
+연령에 관계없이 사용할 수 있도록 특정 연령대를 연상시키는 캐릭터나 장식보다 생활 기반 콘텐츠와 직관적인 인터페이스를 중심으로 구성한다.
+
+Expansion Target
+
+말하기·대화 능력 향상을 원하는 일반 사용자
+
+MVP는 실어증 환자의 발화 재활을 중심으로 설계하되, 동일한 생활 기반 콘텐츠와 AI 대화 기술을 활용하여 향후 일반 사용자의 말하기·대화 훈련 서비스로 확장할 수 있는 구조를 고려한다.
+
+현재는 의료·재활 목적의 사용자 경험을 중심으로 검증하고, 향후 동일한 기술·콘텐츠 구조를 일반적인 말하기 훈련 영역으로 확장한다.
+
+2. 플랫폼 : 안드로이드
+
+3. 로그인 :  구글 로그인으로만 할게
+
+4. 구글로그인 이후에 회원가입창으로 넘어가. 회원가입 페이지에서 이름, 성별, 나이, 취미, 관심사 태그(건강관리, 등산, 골프, 여행, 트로트, 요리, 텃밭가꾸기, 낚시, 독서, 바둑, 사진, 전시관람, 국내여행, 반려동물, 봉사활동)
+
+5. 설문조사: 5개 항목, 5점 척도, 난이도 배정 아님
+
+6. 테마별 학습 : 초기 테마는 2개로 고정, 한 세션 안에 알아듣기/이름대기/따라말하기/자발화 각 2개 항목, AI대화 4개 항목 랜덤
+
+7. 알아듣기 : 선택지 2개, 다시듣기 버튼으로 재생, 제출버튼 / 이름대기 : 사진 소스는 DB에서 나옴, 힌트 버튼, 제출 버튼, 정답은 화면으로 / 따라말하기 : TTS아직 불명확, 정해진 판정 기준에 따라서 / 자발화 : 평가 기준 있음 / AI대화 : 사용자 응답에 따라 턴 정함, 4턴까지는 고정
+
+8. 점수 체계 =  평가 지표 : AQ = (자발화 점수 + 이해력점수/20 + 따라말하기점수/10 + 이름대기점수/10) × 2 AQ로 나오는 점수 → 100점 만점 자발화 점수로 나오는 점수 → 20점 만점 이해력 점수로 나오는 점수 → 10점 만점 따라말하기 점수로 나오는 점수 → 10점 만점 이름대기 점수로 나오는 점수 → 10점 만점
+
+9. 보고서 : 상단에 자발화 점수 + 이해력점수/20 + 따라말하기점수/10 + 이름대기점수/10를 방사형 그래프 형식으로 배치, 항목별 점수 제공, 하단에 항목별 점수 제공, 다시풀기 없음
+
+10. 푸시 알림: 서비스 방문·참여를 유도하는 일반 알림입니다.
+
+   * 트리거: 신규 콘텐츠 발행, 새 댓글·반응, 주간 요약, 장기 미접속 등
+
+   * 톤: 가볍고 반가운 초대형
+
+   * 예: “오늘의 덕담이 도착했어요. 잠시 마음을 나눠볼까요?”
+
+연습 알림: 사용자가 진행 중인 ‘오늘의 학습’을 이어가도록 돕는 학습 리마인더입니다.
+
+* 트리거: 사용자가 설정한 연습 시간, 당일 학습 미완료, 중단 후 일정 시간 경과, 연속 학습 유지 시점
+
+* 톤: 부담을 낮춘 격려형. 미완료를 지적하거나 압박하지 않음
+
+* 예: “오늘의 짧은 연습, 편하실 때 이어서 해보세요.”
+
+* 예: “어제 하던 연습이 남아 있어요. 3분이면 충분해요.”
+
+11. 접근성 고려 
+
+12. 로딩페이지: 컨텐츠 로딩 중, AI 응답 대기 중 둘 다 사용
+
+13. 회원탈퇴 시 학습 기록 데이터 처리 정책 아직 없음
+
+14. 무드/톤: 귀엽고 친근한 느낌 이지만 50대 이상 연령층을 고려해 너무 유치하지 않게
+
+15. 레퍼런스 : 산타토익, 듀오링고
+
+16. 브랜드 컬러 : 메인 캐릭터인 오리 컬러 활용(흰색, 아이보리, 노란색, 갈색 등)
+
+17. 덕분이 캐릭터 : 덕분이 이미지 참고
+
+18. 지정된 폰트 없음
+
+19. 다크모드 고려하지 않음
+
+20. 아이콘: 기본 기능은 라인 아이콘  
+
+- 홈, 학습, 기록, 알림, 설정 등
+
+- 얇지만 너무 가늘지 않은 2~2.5px 선, 둥근 모서리
+
+- 토스처럼 정돈되고 성인 서비스다운 인상
+
+강조 아이콘: 핵심 행동에만 필드 아이콘  
+
+- 학습 시작, 녹음하기, 힌트 보기, 완료 등
+
+- 브랜드 포인트 컬러를 채워 행동 유도에 사용
+
+- 모든 아이콘을 채우면 화면이 무겁고 유아용 앱처럼 보일 수 있음
+
+이름대기·테마 카드 콘텐츠 이미지: cafe_1 이미지 참고 (자체 생성한 이미지 활용할 예정)
+
+21. 카피 톤: 존댓말, 격려/피드백 문구 분위기
+
+22. 피하고 싶은 "AI스러운" 요소 : 부가적인 설명, 딱딱한 제안형 문체
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/739a4e50-5dda-486c-b1d8-7d4913159d94).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +112,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
