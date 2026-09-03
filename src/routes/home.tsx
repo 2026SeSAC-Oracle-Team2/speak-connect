@@ -101,9 +101,9 @@ function HomePage() {
             to="/learn/$themeId"
             params={{ themeId: "daily" }}
             aria-label="덕분이와 대화 시작하기"
-            className="grid size-20 place-items-center overflow-hidden rounded-full border-4 border-brand-yellow bg-brand-yellow shadow-[var(--shadow-card)] transition-transform active:scale-[0.96]"
+            className="grid size-20 place-items-center overflow-hidden rounded-full border-4 border-[oklch(0.9_0.16_88)] bg-gradient-to-b from-[oklch(0.9_0.16_88)] to-brand-yellow shadow-[0_10px_28px_-6px_oklch(0.48_0.075_58_/_0.45),0_4px_10px_-4px_oklch(0.48_0.075_58_/_0.35),inset_0_-3px_8px_-4px_oklch(0.48_0.075_58_/_0.25)] transition-all active:scale-[0.96] active:shadow-[0_6px_16px_-6px_oklch(0.48_0.075_58_/_0.4)]"
           >
-            <img src={duck} alt="덕분이" className="size-14 object-contain" />
+            <img src={duck} alt="덕분이" className="size-14 object-contain drop-shadow-md" />
           </Link>
         </div>
       </Screen>
