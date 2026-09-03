@@ -19,7 +19,6 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SurveyRouteImport } from './routes/survey'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as LearnThemeIdRouteImport } from './routes/learn.$themeId'
-import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -71,50 +70,42 @@ const LearnThemeIdRoute = LearnThemeIdRouteImport.update({
   path: '/learn/$themeId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileEditRoute = ProfileEditRouteImport.update({
-  id: '/edit',
-  path: '/edit',
-  getParentRoute: () => ProfileRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/profile': typeof ProfileRouteWithChildren
+  '/profile': typeof ProfileRoute
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
   '/learn/$themeId': typeof LearnThemeIdRoute
-  '/profile/edit': typeof ProfileEditRoute
   '/learn/': typeof LearnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/profile': typeof ProfileRouteWithChildren
+  '/profile': typeof ProfileRoute
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
   '/learn/$themeId': typeof LearnThemeIdRoute
-  '/profile/edit': typeof ProfileEditRoute
   '/learn': typeof LearnIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/profile': typeof ProfileRouteWithChildren
+  '/profile': typeof ProfileRoute
   '/records': typeof RecordsRoute
   '/report': typeof ReportRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/survey': typeof SurveyRoute
   '/learn/$themeId': typeof LearnThemeIdRoute
-  '/profile/edit': typeof ProfileEditRoute
   '/learn/': typeof LearnIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,7 +120,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/survey'
     | '/learn/$themeId'
-    | '/profile/edit'
     | '/learn/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -142,7 +132,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/survey'
     | '/learn/$themeId'
-    | '/profile/edit'
     | '/learn'
   id:
     | '__root__'
@@ -155,14 +144,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/survey'
     | '/learn/$themeId'
-    | '/profile/edit'
     | '/learn/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
-  ProfileRoute: typeof ProfileRouteWithChildren
+  ProfileRoute: typeof ProfileRoute
   RecordsRoute: typeof RecordsRoute
   ReportRoute: typeof ReportRoute
   SettingsRoute: typeof SettingsRoute
@@ -244,31 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnThemeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile/edit': {
-      id: '/profile/edit'
-      path: '/edit'
-      fullPath: '/profile/edit'
-      preLoaderRoute: typeof ProfileEditRouteImport
-      parentRoute: typeof ProfileRoute
-    }
   }
 }
-
-interface ProfileRouteChildren {
-  ProfileEditRoute: typeof ProfileEditRoute
-}
-
-const ProfileRouteChildren: ProfileRouteChildren = {
-  ProfileEditRoute: ProfileEditRoute,
-}
-
-const ProfileRouteWithChildren =
-  ProfileRoute._addFileChildren(ProfileRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
-  ProfileRoute: ProfileRouteWithChildren,
+  ProfileRoute: ProfileRoute,
   RecordsRoute: RecordsRoute,
   ReportRoute: ReportRoute,
   SettingsRoute: SettingsRoute,
