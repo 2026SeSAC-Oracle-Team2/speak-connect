@@ -111,8 +111,8 @@ function SignupPage() {
           <input id="birth" type="date" className={field} required />
         </div>
 
-
         <div className="space-y-2">
+
           <label htmlFor="hobby" className="block text-[15px] font-semibold">
             취미
           </label>
