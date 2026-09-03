@@ -1,16 +1,24 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Btn, Card, DuckSays, Loading, ProgressBar, Screen } from "@/components/app/ui";
-import { SESSIONS, STEP_LABEL, THEMES, type SessionStep, type ThemeId } from "@/lib/learning";
+import {
+  SESSIONS,
+  SESSION_TITLE,
+  STEP_LABEL,
+  stepWeight,
+  totalItems,
+  type SessionId,
+  type SessionStep,
+} from "@/lib/learning";
 import cafe from "@/assets/cafe_1.jpg";
 import { Volume2, Lightbulb, Mic, X, Check } from "lucide-react";
 
 export const Route = createFileRoute("/learn/$themeId")({
   head: () => ({
     meta: [
-      { title: "테마 학습 세션 — 덕분이" },
+      { title: "학습 세션 — 덕분이" },
       { name: "description", content: "알아듣기, 이름대기, 따라말하기, 자발화와 AI 대화를 차례로 연습해요." },
-      { property: "og:title", content: "테마 학습 세션 — 덕분이" },
+      { property: "og:title", content: "학습 세션 — 덕분이" },
       { property: "og:description", content: "생활 상황 속에서 한 걸음씩 말하기를 연습하는 세션이에요." },
     ],
   }),
@@ -20,15 +28,18 @@ export const Route = createFileRoute("/learn/$themeId")({
 function SessionPage() {
   const { themeId } = Route.useParams();
   const navigate = useNavigate();
-  const theme = THEMES.find((t) => t.id === (themeId as ThemeId)) ?? THEMES[0]!;
-  const steps = SESSIONS[theme.id];
+  const id: SessionId = (["cafe", "hospital", "daily"] as const).includes(themeId as SessionId)
+    ? (themeId as SessionId)
+    : "daily";
+  const steps = SESSIONS[id];
 
   const [idx, setIdx] = useState(0);
   const step = steps[idx]!;
-  const total = steps.length;
+  const total = totalItems(steps);
+  const done = steps.slice(0, idx).reduce((n, s) => n + stepWeight(s), 0);
 
   const next = () => {
-    if (idx + 1 >= total) navigate({ to: "/report" });
+    if (idx + 1 >= steps.length) navigate({ to: "/report" });
     else setIdx(idx + 1);
   };
 
@@ -43,16 +54,17 @@ function SessionPage() {
           <X size={22} strokeWidth={2.2} aria-hidden />
         </Link>
         <div className="flex-1">
-          <ProgressBar value={((idx + 1) / total) * 100} label="세션 진행률" />
+          <ProgressBar value={((done + stepWeight(step)) / total) * 100} label="세션 진행률" />
         </div>
         <span className="text-[14px] font-semibold text-muted-foreground">
-          {idx + 1}/{total}
+          {done + 1}/{total}
         </span>
       </header>
 
-      <p className="mb-4 inline-flex rounded-full bg-secondary px-3 py-1 text-[13px] font-semibold text-accent">
-        {theme.title} · {STEP_LABEL[step.kind]}
+      <p className="mb-2 inline-flex rounded-full bg-secondary px-3 py-1 text-[13px] font-semibold text-accent">
+        {SESSION_TITLE[id]} · {STEP_LABEL[step.kind]}
       </p>
+      <h2 className="mb-4 text-[15px] font-semibold text-muted-foreground">{step.title}</h2>
 
       <StepView key={idx} step={step} onNext={next} />
     </Screen>
@@ -62,9 +74,30 @@ function SessionPage() {
 function StepView({ step, onNext }: { step: SessionStep; onNext: () => void }) {
   if (step.kind === "listen") return <ListenStep step={step} onNext={onNext} />;
   if (step.kind === "naming") return <NamingStep step={step} onNext={onNext} />;
-  if (step.kind === "repeat") return <SpeakStep title={step.sentence} guide="문장을 그대로 따라 말해 주세요." onNext={onNext} />;
-  if (step.kind === "spontaneous") return <SpeakStep title={step.prompt} guide="편하신 만큼 자유롭게 말씀해 주세요." onNext={onNext} />;
-  return <ChatStep turns={step.turns} onNext={onNext} />;
+  if (step.kind === "repeat") return <RepeatStep sentence={step.sentence} onNext={onNext} />;
+  if (step.kind === "spontaneous") return <SpontaneousStep prompt={step.prompt} onNext={onNext} />;
+  return <ChatStep step={step} onNext={onNext} />;
+}
+
+function PlayButton({ label = "다시 듣기" }: { label?: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <Card className="flex flex-col items-center gap-3 py-7">
+      <button
+        onClick={() => {
+          setPlaying(true);
+          setTimeout(() => setPlaying(false), 1200);
+        }}
+        className="grid size-20 place-items-center rounded-full bg-[image:var(--gradient-brand)] text-primary-foreground shadow-[var(--shadow-soft)]"
+        aria-label="문장 다시 듣기"
+      >
+        <Volume2 size={34} fill="currentColor" strokeWidth={0} aria-hidden />
+      </button>
+      <p className="text-[15px] text-muted-foreground" aria-live="polite">
+        {playing ? "들려드리고 있어요" : label}
+      </p>
+    </Card>
+  );
 }
 
 function ListenStep({
@@ -76,27 +109,12 @@ function ListenStep({
 }) {
   const [picked, setPicked] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [playing, setPlaying] = useState(false);
 
   return (
     <div className="space-y-5">
-      <h2 className="text-[20px] font-bold leading-snug">{step.prompt}</h2>
+      <h3 className="text-[20px] font-bold leading-snug">{step.prompt}</h3>
 
-      <Card className="flex flex-col items-center gap-3 py-7">
-        <button
-          onClick={() => {
-            setPlaying(true);
-            setTimeout(() => setPlaying(false), 1200);
-          }}
-          className="grid size-20 place-items-center rounded-full bg-[image:var(--gradient-brand)] text-primary-foreground shadow-[var(--shadow-soft)]"
-          aria-label="문장 다시 듣기"
-        >
-          <Volume2 size={34} fill="currentColor" strokeWidth={0} aria-hidden />
-        </button>
-        <p className="text-[15px] text-muted-foreground" aria-live="polite">
-          {playing ? "들려드리고 있어요" : "다시 듣기"}
-        </p>
-      </Card>
+      <PlayButton />
 
       <ul className="space-y-3">
         {step.options.map((o, i) => {
@@ -129,7 +147,9 @@ function ListenStep({
       {submitted ? (
         <>
           <DuckSays>
-            {picked === step.answer ? "정확히 들으셨어요. 잘하셨어요!" : `정답은 “${step.options[step.answer]}”예요. 다시 들어보면 더 또렷해요.`}
+            {picked === step.answer
+              ? "정확히 들으셨어요. 잘하셨어요!"
+              : `정답은 “${step.options[step.answer]}”예요.`}
           </DuckSays>
           <Btn full onClick={onNext}>
             다음
@@ -157,7 +177,7 @@ function NamingStep({
 
   return (
     <div className="space-y-5">
-      <h2 className="text-[20px] font-bold leading-snug">{step.prompt}</h2>
+      <h3 className="text-[20px] font-bold leading-snug">{step.prompt}</h3>
       <img
         src={cafe}
         alt="이름을 말할 사진"
@@ -207,96 +227,149 @@ function NamingStep({
   );
 }
 
-function SpeakStep({
-  title,
-  guide,
-  onNext,
-}: {
-  title: string;
-  guide: string;
-  onNext: () => void;
-}) {
+function Recorder({ onDone }: { onDone: () => void }) {
   const [state, setState] = useState<"idle" | "recording" | "scoring" | "done">("idle");
+  return (
+    <Card className="flex flex-col items-center gap-4 py-8">
+      {state === "scoring" ? (
+        <Loading message="말씀을 살펴보고 있어요" />
+      ) : (
+        <>
+          <button
+            onClick={() => {
+              if (state === "recording") {
+                setState("scoring");
+                setTimeout(() => {
+                  setState("done");
+                  onDone();
+                }, 1400);
+              } else setState("recording");
+            }}
+            aria-label={state === "recording" ? "녹음 마치기" : "녹음하기"}
+            className={`grid size-24 place-items-center rounded-full text-primary-foreground shadow-[var(--shadow-soft)] ${
+              state === "recording" ? "animate-pulse bg-accent" : "bg-[image:var(--gradient-brand)]"
+            }`}
+          >
+            <Mic size={40} fill="currentColor" strokeWidth={0} aria-hidden />
+          </button>
+          <p className="text-[15px] text-muted-foreground" aria-live="polite">
+            {state === "recording"
+              ? "듣고 있어요. 마치시면 눌러 주세요."
+              : state === "done"
+                ? "잘 담겼어요."
+                : "버튼을 누르고 말씀해 주세요."}
+          </p>
+        </>
+      )}
+    </Card>
+  );
+}
+
+function RepeatStep({ sentence, onNext }: { sentence: string; onNext: () => void }) {
+  const [recorded, setRecorded] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   return (
     <div className="space-y-5">
-      <h2 className="text-[20px] font-bold leading-snug">{title}</h2>
-      <p className="text-[15px] text-muted-foreground">{guide}</p>
-
-      <Card className="flex flex-col items-center gap-4 py-8">
-        {state === "scoring" ? (
-          <Loading message="말씀을 살펴보고 있어요" />
-        ) : (
-          <>
-            <button
-              onClick={() => {
-                if (state === "recording") {
-                  setState("scoring");
-                  setTimeout(() => setState("done"), 1400);
-                } else setState("recording");
-              }}
-              aria-label={state === "recording" ? "녹음 마치기" : "녹음하기"}
-              className={`grid size-24 place-items-center rounded-full text-primary-foreground shadow-[var(--shadow-soft)] ${
-                state === "recording"
-                  ? "animate-pulse bg-accent"
-                  : "bg-[image:var(--gradient-brand)]"
-              }`}
-            >
-              <Mic size={40} fill="currentColor" strokeWidth={0} aria-hidden />
-            </button>
-            <p className="text-[15px] text-muted-foreground" aria-live="polite">
-              {state === "recording"
-                ? "듣고 있어요. 마치시면 눌러 주세요."
-                : state === "done"
-                  ? "잘 담겼어요."
-                  : "버튼을 누르고 말씀해 주세요."}
-            </p>
-          </>
-        )}
+      <Card className="py-7 text-center">
+        <p className="text-[13px] font-semibold text-muted-foreground">제시어</p>
+        <p className="mt-2 text-[22px] font-bold leading-snug">{sentence}</p>
       </Card>
 
-      {state === "done" ? (
+      <PlayButton />
+      <Recorder onDone={() => setRecorded(true)} />
+
+      {submitted ? (
         <>
-          <DuckSays>또박또박 말씀해 주셨어요. 문장 길이도 알맞았어요.</DuckSays>
+          <DuckSays>또박또박 따라 말씀해 주셨어요.</DuckSays>
           <Btn full onClick={onNext}>
             다음
           </Btn>
         </>
       ) : (
-        <Btn full variant="soft" onClick={onNext}>
-          건너뛰기
+        <Btn full disabled={!recorded} onClick={() => setSubmitted(true)}>
+          제출하기
         </Btn>
       )}
     </div>
   );
 }
 
-function ChatStep({ turns, onNext }: { turns: string[]; onNext: () => void }) {
-  const [turn, setTurn] = useState(0);
+function SpontaneousStep({ prompt, onNext }: { prompt: string; onNext: () => void }) {
+  const [recorded, setRecorded] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <div className="space-y-5">
+      <h3 className="text-[20px] font-bold leading-snug">{prompt}</h3>
+      <img
+        src={cafe}
+        alt="말씀하실 상황 이미지"
+        loading="lazy"
+        width={1024}
+        height={768}
+        className="h-52 w-full rounded-3xl object-cover shadow-[var(--shadow-card)]"
+      />
+
+      <Recorder onDone={() => setRecorded(true)} />
+
+      {submitted ? (
+        <>
+          <DuckSays>문장 길이도 알맞았어요.</DuckSays>
+          <Btn full onClick={onNext}>
+            다음
+          </Btn>
+        </>
+      ) : (
+        <Btn full disabled={!recorded} onClick={() => setSubmitted(true)}>
+          제출하기
+        </Btn>
+      )}
+    </div>
+  );
+}
+
+function ChatStep({
+  step,
+  onNext,
+}: {
+  step: Extract<SessionStep, { kind: "chat" }>;
+  onNext: () => void;
+}) {
+  const [turn, setTurn] = useState(1);
   const [waiting, setWaiting] = useState(false);
   const [log, setLog] = useState<{ who: "ai" | "me"; text: string }[]>([
-    { who: "ai", text: turns[0]! },
+    { who: "ai", text: step.turns[0]! },
   ]);
+
+  const atMax = turn >= step.maxTurns;
+  const canFinish = turn >= step.minTurns;
 
   const reply = () => {
     setLog((l) => [...l, { who: "me", text: "네, 말씀드렸어요." }]);
     setWaiting(true);
     setTimeout(() => {
-      const nextTurn = turn + 1;
       setWaiting(false);
-      setTurn(nextTurn);
-      if (turns[nextTurn]) setLog((l) => [...l, { who: "ai", text: turns[nextTurn]! }]);
+      const nextIdx = turn;
+      if (step.turns[nextIdx] && nextIdx < step.maxTurns) {
+        setLog((l) => [...l, { who: "ai", text: step.turns[nextIdx]! }]);
+        setTurn(nextIdx + 1);
+      } else {
+        setTurn(step.maxTurns);
+      }
     }, 1200);
   };
 
-  const finished = turn >= turns.length - 1;
-
   return (
-    <div className="space-y-5">
-      <h2 className="text-[20px] font-bold leading-snug">덕분이와 이야기 나누기</h2>
-      <p className="text-[15px] text-muted-foreground">{turn + 1} / {turns.length}번째 대화예요.</p>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-[15px] text-muted-foreground">덕분이와 이야기 나누기</p>
+        <span className="rounded-full bg-secondary px-3 py-1 text-[13px] font-semibold text-accent">
+          {turn}/{step.maxTurns}턴
+        </span>
+      </div>
 
-      <ul className="space-y-3">
+      <ul className="space-y-4 rounded-3xl bg-secondary/50 p-4">
         {log.map((m, i) => (
           <li key={i} className={m.who === "me" ? "flex justify-end" : ""}>
             {m.who === "ai" ? (
@@ -312,16 +385,15 @@ function ChatStep({ turns, onNext }: { turns: string[]; onNext: () => void }) {
 
       {waiting ? <Loading message="덕분이가 답을 준비하고 있어요" /> : null}
 
-      {finished && !waiting ? (
-        <Btn full onClick={onNext}>
-          학습 마치고 보고서 보기
+      <Btn full disabled={waiting || atMax} onClick={reply}>
+        <Mic size={20} fill="currentColor" strokeWidth={0} aria-hidden />
+        답하기
+      </Btn>
+      {canFinish ? (
+        <Btn full variant="outline" disabled={waiting} onClick={onNext}>
+          끝내기
         </Btn>
-      ) : (
-        <Btn full disabled={waiting} onClick={reply}>
-          <Mic size={20} fill="currentColor" strokeWidth={0} aria-hidden />
-          답하기
-        </Btn>
-      )}
+      ) : null}
     </div>
   );
 }
