@@ -24,6 +24,7 @@ function SignupPage() {
   const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
   const [name, setName] = useState("");
+  const [photo, setPhoto] = useState<string | null>(null);
 
   const toggle = (t: string) =>
     setTags((p) => (p.includes(t) ? p.filter((x) => x !== t) : [...p, t]));
