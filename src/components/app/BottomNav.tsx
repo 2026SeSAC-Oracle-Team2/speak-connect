@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { House, GraduationCap, ChartLine, Bell, Settings } from "lucide-react";
+import { House, GraduationCap, ChartLine, Settings } from "lucide-react";
 
 const items = [
   { to: "/home", label: "홈", Icon: House },
   { to: "/learn", label: "학습", Icon: GraduationCap },
   { to: "/records", label: "기록", Icon: ChartLine },
-  { to: "/notifications", label: "알림", Icon: Bell },
   { to: "/settings", label: "설정", Icon: Settings },
 ] as const;
 

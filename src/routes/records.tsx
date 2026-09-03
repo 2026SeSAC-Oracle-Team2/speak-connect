@@ -1,4 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+} from "recharts";
 import { Card, PageTitle, Screen } from "@/components/app/ui";
 import { BottomNav } from "@/components/app/BottomNav";
 import { ChevronRight } from "lucide-react";
@@ -17,33 +25,55 @@ export const Route = createFileRoute("/records")({
 
 const history = [
   { date: "9월 2일", theme: "동네 카페에서", aq: 88.6 },
-  { date: "9월 1일", theme: "시장 가는 길", aq: 85.2 },
+  { date: "9월 1일", theme: "병원에서 진료받기", aq: 85.2 },
   { date: "8월 31일", theme: "동네 카페에서", aq: 83.0 },
-  { date: "8월 29일", theme: "시장 가는 길", aq: 80.4 },
+  { date: "8월 29일", theme: "병원에서 진료받기", aq: 80.4 },
 ];
 
+const aqParts = [
+  { item: "자발화", score: 16, max: 20 },
+  { item: "이해력", score: 8, max: 10 },
+  { item: "따라말하기", score: 7, max: 10 },
+  { item: "이름대기", score: 9, max: 10 },
+];
+
+const chartData = aqParts.map((p) => ({ item: p.item, value: (p.score / p.max) * 100 }));
+
 function RecordsPage() {
-  const max = 100;
   return (
     <>
       <Screen>
         <PageTitle title="학습 기록" desc="조금씩 쌓인 연습을 살펴보세요." />
 
         <Card>
-          <h2 className="text-[16px] font-bold">AQ 지수 변화</h2>
-          <div className="mt-5 flex h-40 items-end justify-between gap-3">
-            {[...history].reverse().map((h) => (
-              <div key={h.date} className="flex flex-1 flex-col items-center gap-2">
-                <span className="text-[13px] font-semibold text-accent">{h.aq}</span>
-                <div
-                  className="w-full rounded-t-xl bg-[image:var(--gradient-brand)]"
-                  style={{ height: `${(h.aq / max) * 100}%` }}
-                />
-                <span className="text-[12px] text-muted-foreground">{h.date}</span>
-              </div>
-            ))}
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-[16px] font-bold">AQ 지수</h2>
+            <p className="text-[15px] text-muted-foreground">9월 2일 기준</p>
           </div>
+          <p className="mt-1 text-[40px] font-bold leading-none text-accent">{history[0]?.aq}</p>
+
+          <div className="mt-3 h-64" aria-hidden>
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart data={chartData} outerRadius="72%">
+                <PolarGrid stroke="var(--border)" />
+                <PolarAngleAxis dataKey="item" tick={{ fill: "var(--foreground)", fontSize: 13 }} />
+                <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
+                <Radar dataKey="value" stroke="var(--accent)" fill="var(--primary)" fillOpacity={0.55} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+          <ul className="mt-2 grid grid-cols-2 gap-2 text-[14px]">
+            {aqParts.map((p) => (
+              <li key={p.item} className="flex justify-between rounded-xl bg-secondary px-3 py-2">
+                <span className="text-muted-foreground">{p.item}</span>
+                <span className="font-semibold text-foreground">
+                  {p.score} / {p.max}
+                </span>
+              </li>
+            ))}
+          </ul>
         </Card>
+
 
         <h2 className="mb-3 mt-7 text-[17px] font-bold">지난 보고서</h2>
         <ul className="space-y-3">
