@@ -2,7 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Btn, Card, DuckSays, PageTitle, Screen } from "@/components/app/ui";
 import { INTEREST_TAGS } from "@/lib/learning";
-import { Check } from "lucide-react";
+import { Camera, Check } from "lucide-react";
+import duck from "@/assets/duck.png";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -23,6 +24,7 @@ function SignupPage() {
   const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
   const [name, setName] = useState("");
+  const [photo, setPhoto] = useState<string | null>(null);
 
   const toggle = (t: string) =>
     setTags((p) => (p.includes(t) ? p.filter((x) => x !== t) : [...p, t]));
@@ -39,6 +41,34 @@ function SignupPage() {
           navigate({ to: "/survey" });
         }}
       >
+        <div className="flex flex-col items-center gap-3">
+          <label
+            htmlFor="photo"
+            className="relative grid size-28 cursor-pointer place-items-center overflow-hidden rounded-full border-2 border-border bg-card"
+          >
+            <img
+              src={photo ?? duck}
+              alt="프로필 사진 미리보기"
+              className="size-full object-cover"
+            />
+            <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-foreground/60 py-1.5 text-[12px] font-medium text-primary-foreground">
+              <Camera size={14} aria-hidden />
+              사진
+            </span>
+          </label>
+          <input
+            id="photo"
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) setPhoto(URL.createObjectURL(file));
+            }}
+          />
+          <p className="text-[14px] text-muted-foreground">프로필 사진을 골라주세요. (선택)</p>
+        </div>
+
         <div className="space-y-2">
           <label htmlFor="name" className="block text-[15px] font-semibold">
             이름
