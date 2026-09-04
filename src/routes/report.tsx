@@ -27,7 +27,26 @@ export const Route = createFileRoute("/report")({
 
 const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, naming: 9 };
 
-type Detail = { q: string; answer: string; image?: MediaKey; audio?: boolean };
+type Detail = {
+  /** 문제 음성(또는 제시 문장) */
+  q: string;
+  /** "둘 중 정답을 골라 주세요" 안내 표시 (알아듣기) */
+  choiceGuide?: boolean;
+  /** 문제 그림 (그림 선택 문제·이름대기·자발화) */
+  image?: MediaKey;
+  /** 문제가 음성 버튼으로 제시되는 경우 */
+  questionAudio?: boolean;
+  /** 정답: 텍스트 */
+  answer?: string;
+  /** 사용자가 선택/답한 텍스트 */
+  userAnswer?: string;
+  /** 정답: 그림 */
+  answerImage?: MediaKey;
+  /** 사용자가 선택한 그림 */
+  userImage?: MediaKey;
+  /** 정답이 사용자 녹음인 경우 재생 버튼 */
+  audio?: boolean;
+};
 
 const rows: { key: string; score: number; max: number; note: string; details: Detail[] }[] = [
   {
@@ -36,18 +55,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 20,
     note: "문장의 핵심을 잘 파악했어요.",
     details: [
-      {
-        q: "카페에서 음료를 주문해 보세요.",
-        answer: "내가 말한 답변",
-        image: "cafe_order",
-        audio: true,
-      },
-      {
-        q: "음료를 받는 장면을 설명해 주세요.",
-        answer: "내가 말한 답변",
-        image: "cafe_receive",
-        audio: true,
-      },
+      { q: "카페에서 음료를 주문해 보세요.", image: "cafe_order", audio: true },
+      { q: "음료를 받는 장면을 설명해 주세요.", image: "cafe_receive", audio: true },
     ],
   },
   {
@@ -56,8 +65,19 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "두 번 들으면 더 또렷해져요.",
     details: [
-      { q: "이 음료는 우유를 넣어 부드러워요.", answer: "우유를 넣어 부드러워요" },
-      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피", image: "coffee" },
+      {
+        q: "이 음료는 우유를 넣어 부드러워요.",
+        choiceGuide: true,
+        answer: "우유를 넣어 부드러워요",
+        userAnswer: "우유를 넣어 부드러워요",
+      },
+      {
+        q: "따뜻한 커피 한 잔 주세요.",
+        choiceGuide: true,
+        image: "coffee",
+        answerImage: "coffee",
+        userImage: "icedjuice",
+      },
     ],
   },
   {
@@ -66,8 +86,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "긴 문장에서 잠시 쉬어가면 좋아요.",
     details: [
-      { q: "따뜻한 커피 한 잔 주세요.", answer: "내가 말한 답변", audio: true },
-      { q: "네, 여기서 마시고 갈게요.", answer: "내가 말한 답변", audio: true },
+      { q: "따뜻한 커피 한 잔 주세요.", questionAudio: true, audio: true },
+      { q: "네, 여기서 마시고 갈게요.", questionAudio: true, audio: true },
     ],
   },
   {
@@ -76,8 +96,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "사물 이름을 빠르게 떠올리셨어요.",
     details: [
-      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피", image: "coffee" },
-      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔", image: "coffeecup" },
+      { q: "사진 속 음료의 이름을 말씀해 주세요.", image: "coffee", audio: true },
+      { q: "사진 속 물건의 이름을 말씀해 주세요.", image: "coffeecup", audio: true },
     ],
   },
 ];
@@ -192,7 +212,19 @@ function ReportPage() {
                 <ul className="space-y-2 border-t border-border px-4 py-3">
                   {r.details.map((d, i) => (
                     <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
-                      <p className="text-muted-foreground">문제 {i + 1}. {d.q}</p>
+                      <p className="font-semibold text-foreground">문제 {i + 1}</p>
+                      {d.choiceGuide ? (
+                        <p className="mt-1 text-muted-foreground">
+                          안내: 둘 중 정답을 골라 주세요.
+                        </p>
+                      ) : null}
+                      {d.questionAudio ? (
+                        <RecordingPlayer label={`문제 음성: ${d.q}`} />
+                      ) : (
+                        <p className="mt-1 text-muted-foreground">
+                          {d.choiceGuide ? `음성: ${d.q}` : d.q}
+                        </p>
+                      )}
                       {d.image ? (
                         <img
                           src={MEDIA[d.image]}
@@ -203,11 +235,49 @@ function ReportPage() {
                           className="mt-2 h-32 w-full rounded-xl object-cover"
                         />
                       ) : null}
-                      {d.audio ? (
-                        <RecordingPlayer label={d.answer} />
-                      ) : (
-                        <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
-                      )}
+
+                      <div className="mt-3 rounded-xl bg-card px-3 py-2">
+                        <p className="text-[13px] font-semibold text-muted-foreground">정답</p>
+                        {d.answer ? (
+                          <p className="mt-1 font-semibold text-foreground">{d.answer}</p>
+                        ) : null}
+                        {d.userAnswer ? (
+                          <p className="mt-0.5 text-foreground">내가 고른 답: {d.userAnswer}</p>
+                        ) : null}
+                        {d.answerImage ? (
+                          <div className="mt-2 grid grid-cols-2 gap-2">
+                            <figure>
+                              <img
+                                src={MEDIA[d.answerImage]}
+                                alt={`정답 그림: ${MEDIA_ALT[d.answerImage]}`}
+                                loading="lazy"
+                                width={768}
+                                height={576}
+                                className="h-24 w-full rounded-lg object-cover"
+                              />
+                              <figcaption className="mt-1 text-[12px] text-muted-foreground">
+                                정답 그림
+                              </figcaption>
+                            </figure>
+                            {d.userImage ? (
+                              <figure>
+                                <img
+                                  src={MEDIA[d.userImage]}
+                                  alt={`내가 고른 그림: ${MEDIA_ALT[d.userImage]}`}
+                                  loading="lazy"
+                                  width={768}
+                                  height={576}
+                                  className="h-24 w-full rounded-lg object-cover"
+                                />
+                                <figcaption className="mt-1 text-[12px] text-muted-foreground">
+                                  내가 고른 그림
+                                </figcaption>
+                              </figure>
+                            ) : null}
+                          </div>
+                        ) : null}
+                        {d.audio ? <RecordingPlayer label="내가 말한 답변" /> : null}
+                      </div>
                     </li>
                   ))}
                 </ul>
