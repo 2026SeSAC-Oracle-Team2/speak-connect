@@ -163,7 +163,21 @@ function ReportPage() {
                   {r.details.map((d, i) => (
                     <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
                       <p className="text-muted-foreground">문제 {i + 1}. {d.q}</p>
-                      <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
+                      {d.image ? (
+                        <img
+                          src={MEDIA[d.image]}
+                          alt={MEDIA_ALT[d.image]}
+                          loading="lazy"
+                          width={768}
+                          height={576}
+                          className="mt-2 h-32 w-full rounded-xl object-cover"
+                        />
+                      ) : null}
+                      {d.audio ? (
+                        <RecordingPlayer label={d.answer} />
+                      ) : (
+                        <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
+                      )}
                     </li>
                   ))}
                 </ul>
