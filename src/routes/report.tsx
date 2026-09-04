@@ -7,7 +7,9 @@ import {
   RadarChart,
   ResponsiveContainer,
 } from "recharts";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Play, Pause } from "lucide-react";
+import { useState } from "react";
+import { MEDIA, MEDIA_ALT, type MediaKey } from "@/lib/media";
 import { Btn, Card, DuckSays, PageTitle, Screen } from "@/components/app/ui";
 import { calcAQ, type Scores } from "@/lib/learning";
 
@@ -25,7 +27,7 @@ export const Route = createFileRoute("/report")({
 
 const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, naming: 9 };
 
-type Detail = { q: string; answer: string };
+type Detail = { q: string; answer: string; image?: MediaKey; audio?: boolean };
 
 const rows: { key: string; score: number; max: number; note: string; details: Detail[] }[] = [
   {
@@ -34,8 +36,18 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 20,
     note: "문장의 핵심을 잘 파악했어요.",
     details: [
-      { q: "카페에서 음료를 주문해 보세요.", answer: "직접 말한 문장" },
-      { q: "음료를 받는 장면을 설명해 주세요.", answer: "직접 말한 문장" },
+      {
+        q: "카페에서 음료를 주문해 보세요.",
+        answer: "내가 말한 답변",
+        image: "cafe_order",
+        audio: true,
+      },
+      {
+        q: "음료를 받는 장면을 설명해 주세요.",
+        answer: "내가 말한 답변",
+        image: "cafe_receive",
+        audio: true,
+      },
     ],
   },
   {
@@ -45,7 +57,7 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     note: "두 번 들으면 더 또렷해져요.",
     details: [
       { q: "이 음료는 우유를 넣어 부드러워요.", answer: "우유를 넣어 부드러워요" },
-      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피를 주문했어요" },
+      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피", image: "coffee" },
     ],
   },
   {
@@ -54,8 +66,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "긴 문장에서 잠시 쉬어가면 좋아요.",
     details: [
-      { q: "따라 말해 보세요.", answer: "따뜻한 커피 한 잔 주세요." },
-      { q: "따라 말해 보세요.", answer: "네, 여기서 마시고 갈게요." },
+      { q: "따뜻한 커피 한 잔 주세요.", answer: "내가 말한 답변", audio: true },
+      { q: "네, 여기서 마시고 갈게요.", answer: "내가 말한 답변", audio: true },
     ],
   },
   {
@@ -64,8 +76,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "사물 이름을 빠르게 떠올리셨어요.",
     details: [
-      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피" },
-      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔" },
+      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피", image: "coffee" },
+      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔", image: "coffeecup" },
     ],
   },
 ];
@@ -74,6 +86,34 @@ const chartData = rows.map((r) => ({
   item: r.key.replace("(알아듣기)", ""),
   value: (r.score / r.max) * 100,
 }));
+
+function RecordingPlayer({ label }: { label: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div className="mt-2 flex items-center gap-3 rounded-xl bg-card px-3 py-2">
+      <button
+        onClick={() => {
+          setPlaying(true);
+          setTimeout(() => setPlaying(false), 1600);
+        }}
+        aria-label={playing ? "녹음 재생 중" : "녹음 들어보기"}
+        className="grid size-11 shrink-0 place-items-center rounded-full bg-[image:var(--gradient-brand)] text-primary-foreground shadow-[var(--shadow-soft)]"
+      >
+        {playing ? (
+          <Pause size={20} fill="currentColor" strokeWidth={0} aria-hidden />
+        ) : (
+          <Play size={20} fill="currentColor" strokeWidth={0} aria-hidden />
+        )}
+      </button>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold text-foreground">{label}</p>
+        <p className="text-[13px] text-muted-foreground" aria-live="polite">
+          {playing ? "녹음을 들려드리고 있어요" : "녹음 00:06 · 눌러서 들어보기"}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 function ReportPage() {
   const aq = calcAQ(scores);
@@ -153,7 +193,21 @@ function ReportPage() {
                   {r.details.map((d, i) => (
                     <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
                       <p className="text-muted-foreground">문제 {i + 1}. {d.q}</p>
-                      <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
+                      {d.image ? (
+                        <img
+                          src={MEDIA[d.image]}
+                          alt={MEDIA_ALT[d.image]}
+                          loading="lazy"
+                          width={768}
+                          height={576}
+                          className="mt-2 h-32 w-full rounded-xl object-cover"
+                        />
+                      ) : null}
+                      {d.audio ? (
+                        <RecordingPlayer label={d.answer} />
+                      ) : (
+                        <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
+                      )}
                     </li>
                   ))}
                 </ul>
