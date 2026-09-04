@@ -117,28 +117,49 @@ function ListenStep({
 
       <PlayButton />
 
-      <ul className="space-y-3">
+      <ul className={step.mode === "image" ? "grid grid-cols-2 gap-3" : "space-y-3"}>
         {step.options.map((o, i) => {
           const on = picked === i;
           const correct = submitted && i === step.answer;
           const wrong = submitted && on && i !== step.answer;
+          const tone = correct
+            ? "border-success bg-success/10"
+            : wrong
+              ? "border-destructive bg-destructive/10"
+              : on
+                ? "border-primary bg-secondary"
+                : "border-border bg-card";
           return (
-            <li key={o}>
+            <li key={o.label}>
               <button
                 disabled={submitted}
                 aria-pressed={on}
                 onClick={() => setPicked(i)}
-                className={`min-h-[64px] w-full rounded-2xl border-2 px-4 text-left text-[17px] font-medium ${
-                  correct
-                    ? "border-success bg-success/10"
-                    : wrong
-                      ? "border-destructive bg-destructive/10"
-                      : on
-                        ? "border-primary bg-secondary"
-                        : "border-border bg-card"
-                }`}
+                className={
+                  step.mode === "image"
+                    ? `w-full overflow-hidden rounded-2xl border-2 p-2 text-center ${tone}`
+                    : `min-h-[64px] w-full rounded-2xl border-2 px-4 text-left text-[17px] font-medium ${tone}`
+                }
               >
-                {o}
+                {step.mode === "image" && o.image ? (
+                  <img
+                    src={MEDIA[o.image]}
+                    alt={MEDIA_ALT[o.image]}
+                    loading="lazy"
+                    width={768}
+                    height={576}
+                    className="h-32 w-full rounded-xl object-cover"
+                  />
+                ) : null}
+                <span
+                  className={
+                    step.mode === "image"
+                      ? "mt-2 block text-[16px] font-semibold"
+                      : undefined
+                  }
+                >
+                  {o.label}
+                </span>
               </button>
             </li>
           );
@@ -150,7 +171,8 @@ function ListenStep({
           <DuckSays>
             {picked === step.answer
               ? "정확히 들으셨어요. 잘하셨어요!"
-              : `정답은 “${step.options[step.answer]}”예요.`}
+              : `정답은 “${step.options[step.answer].label}”예요.`}
+
           </DuckSays>
           <Btn full onClick={onNext}>
             다음
