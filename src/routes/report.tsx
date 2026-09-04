@@ -214,16 +214,16 @@ function ReportPage() {
                     <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
                       <p className="font-semibold text-foreground">문제 {i + 1}</p>
                       {d.choiceGuide ? (
-                        <p className="mt-1 text-muted-foreground">
-                          안내: 둘 중 정답을 골라 주세요.
-                        </p>
-                      ) : null}
-                      {d.questionAudio ? (
-                        <RecordingPlayer label={`문제 음성: ${d.q}`} />
+                        <>
+                          <p className="mt-1 text-muted-foreground">
+                            안내: 둘 중 정답을 골라 주세요.
+                          </p>
+                          <RecordingPlayer label="문제 음성 듣기" />
+                        </>
+                      ) : d.questionAudio ? (
+                        <RecordingPlayer label="문제 음성 듣기" />
                       ) : (
-                        <p className="mt-1 text-muted-foreground">
-                          {d.choiceGuide ? `음성: ${d.q}` : d.q}
-                        </p>
+                        <p className="mt-1 text-muted-foreground">{d.q}</p>
                       )}
                       {d.image ? (
                         <img
