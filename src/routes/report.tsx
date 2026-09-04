@@ -30,6 +30,8 @@ const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, namin
 type Detail = {
   /** 문제 음성(또는 제시 문장) */
   q: string;
+  /** "둘 중 정답을 골라 주세요" 안내 표시 (알아듣기) */
+  choiceGuide?: boolean;
   /** 문제 그림 (그림 선택 문제·이름대기·자발화) */
   image?: MediaKey;
   /** 문제가 음성 버튼으로 제시되는 경우 */
@@ -53,18 +55,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 20,
     note: "문장의 핵심을 잘 파악했어요.",
     details: [
-      {
-        q: "카페에서 음료를 주문해 보세요.",
-        answer: "내가 말한 답변",
-        image: "cafe_order",
-        audio: true,
-      },
-      {
-        q: "음료를 받는 장면을 설명해 주세요.",
-        answer: "내가 말한 답변",
-        image: "cafe_receive",
-        audio: true,
-      },
+      { q: "카페에서 음료를 주문해 보세요.", image: "cafe_order", audio: true },
+      { q: "음료를 받는 장면을 설명해 주세요.", image: "cafe_receive", audio: true },
     ],
   },
   {
