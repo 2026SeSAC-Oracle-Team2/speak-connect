@@ -27,7 +27,24 @@ export const Route = createFileRoute("/report")({
 
 const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, naming: 9 };
 
-type Detail = { q: string; answer: string; image?: MediaKey; audio?: boolean };
+type Detail = {
+  /** 문제 음성(또는 제시 문장) */
+  q: string;
+  /** 문제 그림 (그림 선택 문제·이름대기·자발화) */
+  image?: MediaKey;
+  /** 문제가 음성 버튼으로 제시되는 경우 */
+  questionAudio?: boolean;
+  /** 정답: 텍스트 */
+  answer?: string;
+  /** 사용자가 선택/답한 텍스트 */
+  userAnswer?: string;
+  /** 정답: 그림 */
+  answerImage?: MediaKey;
+  /** 사용자가 선택한 그림 */
+  userImage?: MediaKey;
+  /** 정답이 사용자 녹음인 경우 재생 버튼 */
+  audio?: boolean;
+};
 
 const rows: { key: string; score: number; max: number; note: string; details: Detail[] }[] = [
   {
