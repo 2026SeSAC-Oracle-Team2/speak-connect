@@ -240,19 +240,15 @@ function ReportPage() {
                       {d.optionImages ? (
                         <div className="mt-2 grid grid-cols-2 gap-2">
                           {d.optionImages.map((key) => (
-                            <figure key={key}>
-                              <img
-                                src={MEDIA[key]}
-                                alt={`선택지: ${MEDIA_ALT[key]}`}
-                                loading="lazy"
-                                width={768}
-                                height={576}
-                                className="h-24 w-full rounded-lg object-cover"
-                              />
-                              <figcaption className="mt-1 text-[12px] text-muted-foreground">
-                                {MEDIA_ALT[key]}
-                              </figcaption>
-                            </figure>
+                            <img
+                              key={key}
+                              src={MEDIA[key]}
+                              alt={`선택지: ${MEDIA_ALT[key]}`}
+                              loading="lazy"
+                              width={768}
+                              height={576}
+                              className="h-24 w-full rounded-lg object-cover"
+                            />
                           ))}
                         </div>
                       ) : null}
@@ -267,33 +263,23 @@ function ReportPage() {
                         ) : null}
                         {d.answerImage ? (
                           <div className="mt-2 grid grid-cols-2 gap-2">
-                            <figure>
+                            <img
+                              src={MEDIA[d.answerImage]}
+                              alt={`정답 그림: ${MEDIA_ALT[d.answerImage]}`}
+                              loading="lazy"
+                              width={768}
+                              height={576}
+                              className="h-24 w-full rounded-lg object-cover"
+                            />
+                            {d.userImage ? (
                               <img
-                                src={MEDIA[d.answerImage]}
-                                alt={`정답 그림: ${MEDIA_ALT[d.answerImage]}`}
+                                src={MEDIA[d.userImage]}
+                                alt={`내가 고른 그림: ${MEDIA_ALT[d.userImage]}`}
                                 loading="lazy"
                                 width={768}
                                 height={576}
                                 className="h-24 w-full rounded-lg object-cover"
                               />
-                              <figcaption className="mt-1 text-[12px] text-muted-foreground">
-                                정답 그림
-                              </figcaption>
-                            </figure>
-                            {d.userImage ? (
-                              <figure>
-                                <img
-                                  src={MEDIA[d.userImage]}
-                                  alt={`내가 고른 그림: ${MEDIA_ALT[d.userImage]}`}
-                                  loading="lazy"
-                                  width={768}
-                                  height={576}
-                                  className="h-24 w-full rounded-lg object-cover"
-                                />
-                                <figcaption className="mt-1 text-[12px] text-muted-foreground">
-                                  내가 고른 그림
-                                </figcaption>
-                              </figure>
                             ) : null}
                           </div>
                         ) : null}
