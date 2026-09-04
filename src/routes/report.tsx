@@ -69,7 +69,10 @@ const rows: { key: string; score: number; max: number; note: string; details: De
   },
 ];
 
-const chartData = rows.map((r) => ({ item: r.key, value: (r.score / r.max) * 100 }));
+const chartData = rows.map((r) => ({
+  item: r.key.replace("(알아듣기)", ""),
+  value: (r.score / r.max) * 100,
+}));
 
 function ReportPage() {
   const aq = calcAQ(scores);
