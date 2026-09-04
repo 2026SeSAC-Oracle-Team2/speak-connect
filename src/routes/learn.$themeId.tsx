@@ -11,7 +11,7 @@ import {
   type SessionId,
   type SessionStep,
 } from "@/lib/learning";
-import cafe from "@/assets/cafe_1.jpg";
+import { MEDIA, MEDIA_ALT, type MediaKey } from "@/lib/media";
 import { Volume2, Lightbulb, Mic, X, Check } from "lucide-react";
 
 export const Route = createFileRoute("/learn/$themeId")({
@@ -76,7 +76,7 @@ function StepView({ step, onNext }: { step: SessionStep; onNext: () => void }) {
   if (step.kind === "listen") return <ListenStep step={step} onNext={onNext} />;
   if (step.kind === "naming") return <NamingStep step={step} onNext={onNext} />;
   if (step.kind === "repeat") return <RepeatStep sentence={step.sentence} onNext={onNext} />;
-  if (step.kind === "spontaneous") return <SpontaneousStep prompt={step.prompt} onNext={onNext} />;
+  if (step.kind === "spontaneous") return <SpontaneousStep prompt={step.prompt} image={step.image} onNext={onNext} />;
   return <ChatStep step={step} onNext={onNext} />;
 }
 
@@ -202,8 +202,8 @@ function NamingStep({
     <div className="space-y-5">
       <h3 className="text-[20px] font-bold leading-snug">{step.prompt}</h3>
       <img
-        src={cafe}
-        alt="이름을 말할 사진"
+        src={MEDIA[step.image]}
+        alt={MEDIA_ALT[step.image]}
         loading="lazy"
         width={1024}
         height={768}
@@ -318,7 +318,15 @@ function RepeatStep({ sentence, onNext }: { sentence: string; onNext: () => void
   );
 }
 
-function SpontaneousStep({ prompt, onNext }: { prompt: string; onNext: () => void }) {
+function SpontaneousStep({
+  prompt,
+  image,
+  onNext,
+}: {
+  prompt: string;
+  image: MediaKey;
+  onNext: () => void;
+}) {
   const [recorded, setRecorded] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -326,8 +334,8 @@ function SpontaneousStep({ prompt, onNext }: { prompt: string; onNext: () => voi
     <div className="space-y-5">
       <h3 className="text-[20px] font-bold leading-snug">{prompt}</h3>
       <img
-        src={cafe}
-        alt="말씀하실 상황 이미지"
+        src={MEDIA[image]}
+        alt={MEDIA_ALT[image]}
         loading="lazy"
         width={1024}
         height={768}
