@@ -237,6 +237,25 @@ function ReportPage() {
                           className="mt-2 h-32 w-full rounded-xl object-cover"
                         />
                       ) : null}
+                      {d.optionImages ? (
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          {d.optionImages.map((key) => (
+                            <figure key={key}>
+                              <img
+                                src={MEDIA[key]}
+                                alt={`선택지: ${MEDIA_ALT[key]}`}
+                                loading="lazy"
+                                width={768}
+                                height={576}
+                                className="h-24 w-full rounded-lg object-cover"
+                              />
+                              <figcaption className="mt-1 text-[12px] text-muted-foreground">
+                                {MEDIA_ALT[key]}
+                              </figcaption>
+                            </figure>
+                          ))}
+                        </div>
+                      ) : null}
 
                       <div className="mt-3 rounded-xl bg-card px-3 py-2">
                         <p className="text-[13px] font-semibold text-muted-foreground">정답</p>
