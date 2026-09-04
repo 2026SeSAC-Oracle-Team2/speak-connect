@@ -25,7 +25,7 @@ export const Route = createFileRoute("/report")({
 
 const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, naming: 9 };
 
-type Detail = { q: string; answer: string };
+type Detail = { q: string; answer: string; image?: MediaKey; audio?: boolean };
 
 const rows: { key: string; score: number; max: number; note: string; details: Detail[] }[] = [
   {
@@ -34,8 +34,18 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 20,
     note: "문장의 핵심을 잘 파악했어요.",
     details: [
-      { q: "카페에서 음료를 주문해 보세요.", answer: "직접 말한 문장" },
-      { q: "음료를 받는 장면을 설명해 주세요.", answer: "직접 말한 문장" },
+      {
+        q: "카페에서 음료를 주문해 보세요.",
+        answer: "내가 말한 답변",
+        image: "cafe_order",
+        audio: true,
+      },
+      {
+        q: "음료를 받는 장면을 설명해 주세요.",
+        answer: "내가 말한 답변",
+        image: "cafe_receive",
+        audio: true,
+      },
     ],
   },
   {
@@ -45,7 +55,7 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     note: "두 번 들으면 더 또렷해져요.",
     details: [
       { q: "이 음료는 우유를 넣어 부드러워요.", answer: "우유를 넣어 부드러워요" },
-      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피를 주문했어요" },
+      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피", image: "coffee" },
     ],
   },
   {
@@ -54,8 +64,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "긴 문장에서 잠시 쉬어가면 좋아요.",
     details: [
-      { q: "따라 말해 보세요.", answer: "따뜻한 커피 한 잔 주세요." },
-      { q: "따라 말해 보세요.", answer: "네, 여기서 마시고 갈게요." },
+      { q: "따뜻한 커피 한 잔 주세요.", answer: "내가 말한 답변", audio: true },
+      { q: "네, 여기서 마시고 갈게요.", answer: "내가 말한 답변", audio: true },
     ],
   },
   {
@@ -64,8 +74,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "사물 이름을 빠르게 떠올리셨어요.",
     details: [
-      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피" },
-      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔" },
+      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피", image: "coffee" },
+      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔", image: "coffeecup" },
     ],
   },
 ];
