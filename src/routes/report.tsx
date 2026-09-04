@@ -240,19 +240,15 @@ function ReportPage() {
                       {d.optionImages ? (
                         <div className="mt-2 grid grid-cols-2 gap-2">
                           {d.optionImages.map((key) => (
-                            <figure key={key}>
-                              <img
-                                src={MEDIA[key]}
-                                alt={`선택지: ${MEDIA_ALT[key]}`}
-                                loading="lazy"
-                                width={768}
-                                height={576}
-                                className="h-24 w-full rounded-lg object-cover"
-                              />
-                              <figcaption className="mt-1 text-[12px] text-muted-foreground">
-                                {MEDIA_ALT[key]}
-                              </figcaption>
-                            </figure>
+                            <img
+                              key={key}
+                              src={MEDIA[key]}
+                              alt={`선택지: ${MEDIA_ALT[key]}`}
+                              loading="lazy"
+                              width={768}
+                              height={576}
+                              className="h-24 w-full rounded-lg object-cover"
+                            />
                           ))}
                         </div>
                       ) : null}
