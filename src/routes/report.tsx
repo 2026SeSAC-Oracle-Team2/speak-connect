@@ -7,6 +7,7 @@ import {
   RadarChart,
   ResponsiveContainer,
 } from "recharts";
+import { ChevronDown } from "lucide-react";
 import { Btn, Card, DuckSays, PageTitle, Screen } from "@/components/app/ui";
 import { calcAQ, type Scores } from "@/lib/learning";
 
