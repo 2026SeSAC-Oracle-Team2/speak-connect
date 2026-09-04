@@ -119,21 +119,44 @@ function ReportPage() {
       <ul className="space-y-3">
         {rows.map((r) => (
           <li key={r.key}>
-            <Card className="p-4">
-              <div className="flex items-baseline justify-between">
-                <h3 className="text-[16px] font-semibold">{r.key}</h3>
-                <p className="text-[17px] font-bold text-accent">
-                  {r.score}
-                  <span className="text-[14px] font-medium text-muted-foreground"> / {r.max}</span>
-                </p>
-              </div>
-              <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-secondary">
-                <div
-                  className="h-full rounded-full bg-[image:var(--gradient-brand)]"
-                  style={{ width: `${(r.score / r.max) * 100}%` }}
-                />
-              </div>
-              <p className="mt-2 text-[14px] text-muted-foreground">{r.note}</p>
+            <Card className="p-0">
+              <details className="group">
+                <summary className="flex cursor-pointer list-none items-center gap-3 p-4 [&::-webkit-details-marker]:hidden">
+                  <ChevronDown
+                    size={20}
+                    strokeWidth={2.2}
+                    aria-hidden
+                    className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-baseline justify-between">
+                      <h3 className="text-[16px] font-semibold">{r.key}</h3>
+                      <p className="text-[17px] font-bold text-accent">
+                        {r.score}
+                        <span className="text-[14px] font-medium text-muted-foreground">
+                          {" "}
+                          / {r.max}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-secondary">
+                      <div
+                        className="h-full rounded-full bg-[image:var(--gradient-brand)]"
+                        style={{ width: `${(r.score / r.max) * 100}%` }}
+                      />
+                    </div>
+                    <p className="mt-2 text-[14px] text-muted-foreground">{r.note}</p>
+                  </div>
+                </summary>
+                <ul className="space-y-2 border-t border-border px-4 py-3">
+                  {r.details.map((d, i) => (
+                    <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
+                      <p className="text-muted-foreground">문제 {i + 1}. {d.q}</p>
+                      <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
+                    </li>
+                  ))}
+                </ul>
+              </details>
             </Card>
           </li>
         ))}
