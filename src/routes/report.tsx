@@ -34,6 +34,8 @@ type Detail = {
   choiceGuide?: boolean;
   /** 문제 그림 (그림 선택 문제·이름대기·자발화) */
   image?: MediaKey;
+  /** 그림 선택지 2개 (알아듣기 그림 문제) */
+  optionImages?: [MediaKey, MediaKey];
   /** 문제가 음성 버튼으로 제시되는 경우 */
   questionAudio?: boolean;
   /** 정답: 텍스트 */
@@ -74,7 +76,7 @@ const rows: { key: string; score: number; max: number; note: string; details: De
       {
         q: "따뜻한 커피 한 잔 주세요.",
         choiceGuide: true,
-        image: "coffee",
+        optionImages: ["coffee", "icedjuice"],
         answerImage: "coffee",
         userImage: "icedjuice",
       },
