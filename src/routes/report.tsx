@@ -218,7 +218,15 @@ function ReportPage() {
                 <ul className="space-y-2 border-t border-border px-4 py-3">
                   {r.details.map((d, i) => (
                     <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
-                      <p className="text-muted-foreground">문제 {i + 1}. {d.q}</p>
+                      <p className="font-semibold text-foreground">문제 {i + 1}</p>
+                      <p className="mt-1 text-muted-foreground">
+                        안내: 둘 중 정답을 골라 주세요.
+                      </p>
+                      {d.questionAudio ? (
+                        <RecordingPlayer label={`문제 음성: ${d.q}`} />
+                      ) : (
+                        <p className="mt-1 text-muted-foreground">음성: {d.q}</p>
+                      )}
                       {d.image ? (
                         <img
                           src={MEDIA[d.image]}
@@ -229,11 +237,49 @@ function ReportPage() {
                           className="mt-2 h-32 w-full rounded-xl object-cover"
                         />
                       ) : null}
-                      {d.audio ? (
-                        <RecordingPlayer label={d.answer} />
-                      ) : (
-                        <p className="mt-1 font-semibold text-foreground">정답: {d.answer}</p>
-                      )}
+
+                      <div className="mt-3 rounded-xl bg-card px-3 py-2">
+                        <p className="text-[13px] font-semibold text-muted-foreground">정답</p>
+                        {d.answer ? (
+                          <p className="mt-1 font-semibold text-foreground">{d.answer}</p>
+                        ) : null}
+                        {d.userAnswer ? (
+                          <p className="mt-0.5 text-foreground">내가 고른 답: {d.userAnswer}</p>
+                        ) : null}
+                        {d.answerImage ? (
+                          <div className="mt-2 grid grid-cols-2 gap-2">
+                            <figure>
+                              <img
+                                src={MEDIA[d.answerImage]}
+                                alt={`정답 그림: ${MEDIA_ALT[d.answerImage]}`}
+                                loading="lazy"
+                                width={768}
+                                height={576}
+                                className="h-24 w-full rounded-lg object-cover"
+                              />
+                              <figcaption className="mt-1 text-[12px] text-muted-foreground">
+                                정답 그림
+                              </figcaption>
+                            </figure>
+                            {d.userImage ? (
+                              <figure>
+                                <img
+                                  src={MEDIA[d.userImage]}
+                                  alt={`내가 고른 그림: ${MEDIA_ALT[d.userImage]}`}
+                                  loading="lazy"
+                                  width={768}
+                                  height={576}
+                                  className="h-24 w-full rounded-lg object-cover"
+                                />
+                                <figcaption className="mt-1 text-[12px] text-muted-foreground">
+                                  내가 고른 그림
+                                </figcaption>
+                              </figure>
+                            ) : null}
+                          </div>
+                        ) : null}
+                        {d.audio ? <RecordingPlayer label="내가 말한 답변" /> : null}
+                      </div>
                     </li>
                   ))}
                 </ul>
