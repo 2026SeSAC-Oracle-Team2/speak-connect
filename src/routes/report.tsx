@@ -67,11 +67,13 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     details: [
       {
         q: "이 음료는 우유를 넣어 부드러워요.",
+        choiceGuide: true,
         answer: "우유를 넣어 부드러워요",
         userAnswer: "우유를 넣어 부드러워요",
       },
       {
         q: "따뜻한 커피 한 잔 주세요.",
+        choiceGuide: true,
         image: "coffee",
         answerImage: "coffee",
         userImage: "icedjuice",
@@ -211,9 +213,11 @@ function ReportPage() {
                   {r.details.map((d, i) => (
                     <li key={i} className="rounded-xl bg-secondary px-3 py-2 text-[14px]">
                       <p className="font-semibold text-foreground">문제 {i + 1}</p>
-                      <p className="mt-1 text-muted-foreground">
-                        안내: 둘 중 정답을 골라 주세요.
-                      </p>
+                      {d.choiceGuide ? (
+                        <p className="mt-1 text-muted-foreground">
+                          안내: 둘 중 정답을 골라 주세요.
+                        </p>
+                      ) : null}
                       {d.questionAudio ? (
                         <RecordingPlayer label={`문제 음성: ${d.q}`} />
                       ) : (
