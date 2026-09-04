@@ -62,18 +62,29 @@ export const STEP_LABEL: Record<StepKind, string> = {
   chat: "AI 대화",
 };
 
+export type ListenOption = { label: string; image?: MediaKey };
+
 export type SessionStep =
   | {
       kind: "listen";
+      /** text: 텍스트 2개 중 고르기 / image: 그림 2개 중 고르기 */
+      mode: "text" | "image";
       title: string;
       prompt: string;
       audioText: string;
-      options: [string, string];
+      options: [ListenOption, ListenOption];
       answer: 0 | 1;
     }
-  | { kind: "naming"; title: string; prompt: string; hint: string; answer: string }
+  | {
+      kind: "naming";
+      title: string;
+      prompt: string;
+      hint: string;
+      answer: string;
+      image: MediaKey;
+    }
   | { kind: "repeat"; title: string; sentence: string }
-  | { kind: "spontaneous"; title: string; prompt: string }
+  | { kind: "spontaneous"; title: string; prompt: string; image: MediaKey }
   | { kind: "chat"; title: string; turns: string[]; minTurns: number; maxTurns: number };
 
 /** AI 대화는 4문항으로 계산합니다. */
