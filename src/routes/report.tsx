@@ -73,8 +73,17 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "두 번 들으면 더 또렷해져요.",
     details: [
-      { q: "이 음료는 우유를 넣어 부드러워요.", answer: "우유를 넣어 부드러워요" },
-      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피", image: "coffee" },
+      {
+        q: "이 음료는 우유를 넣어 부드러워요.",
+        answer: "우유를 넣어 부드러워요",
+        userAnswer: "우유를 넣어 부드러워요",
+      },
+      {
+        q: "따뜻한 커피 한 잔 주세요.",
+        image: "coffee",
+        answerImage: "coffee",
+        userImage: "icedjuice",
+      },
     ],
   },
   {
@@ -83,8 +92,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "긴 문장에서 잠시 쉬어가면 좋아요.",
     details: [
-      { q: "따뜻한 커피 한 잔 주세요.", answer: "내가 말한 답변", audio: true },
-      { q: "네, 여기서 마시고 갈게요.", answer: "내가 말한 답변", audio: true },
+      { q: "따뜻한 커피 한 잔 주세요.", questionAudio: true, audio: true },
+      { q: "네, 여기서 마시고 갈게요.", questionAudio: true, audio: true },
     ],
   },
   {
@@ -93,8 +102,8 @@ const rows: { key: string; score: number; max: number; note: string; details: De
     max: 10,
     note: "사물 이름을 빠르게 떠올리셨어요.",
     details: [
-      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피", image: "coffee" },
-      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔", image: "coffeecup" },
+      { q: "사진 속 음료의 이름을 말씀해 주세요.", image: "coffee", audio: true },
+      { q: "사진 속 물건의 이름을 말씀해 주세요.", image: "coffeecup", audio: true },
     ],
   },
 ];
