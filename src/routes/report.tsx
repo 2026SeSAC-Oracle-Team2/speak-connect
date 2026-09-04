@@ -221,7 +221,9 @@ function ReportPage() {
                       {d.questionAudio ? (
                         <RecordingPlayer label={`문제 음성: ${d.q}`} />
                       ) : (
-                        <p className="mt-1 text-muted-foreground">음성: {d.q}</p>
+                        <p className="mt-1 text-muted-foreground">
+                          {d.choiceGuide ? `음성: ${d.q}` : d.q}
+                        </p>
                       )}
                       {d.image ? (
                         <img
