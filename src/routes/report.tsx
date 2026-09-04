@@ -7,7 +7,9 @@ import {
   RadarChart,
   ResponsiveContainer,
 } from "recharts";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Play, Pause } from "lucide-react";
+import { useState } from "react";
+import { MEDIA, MEDIA_ALT, type MediaKey } from "@/lib/media";
 import { Btn, Card, DuckSays, PageTitle, Screen } from "@/components/app/ui";
 import { calcAQ, type Scores } from "@/lib/learning";
 
@@ -84,6 +86,34 @@ const chartData = rows.map((r) => ({
   item: r.key.replace("(알아듣기)", ""),
   value: (r.score / r.max) * 100,
 }));
+
+function RecordingPlayer({ label }: { label: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div className="mt-2 flex items-center gap-3 rounded-xl bg-card px-3 py-2">
+      <button
+        onClick={() => {
+          setPlaying(true);
+          setTimeout(() => setPlaying(false), 1600);
+        }}
+        aria-label={playing ? "녹음 재생 중" : "녹음 들어보기"}
+        className="grid size-11 shrink-0 place-items-center rounded-full bg-[image:var(--gradient-brand)] text-primary-foreground shadow-[var(--shadow-soft)]"
+      >
+        {playing ? (
+          <Pause size={20} fill="currentColor" strokeWidth={0} aria-hidden />
+        ) : (
+          <Play size={20} fill="currentColor" strokeWidth={0} aria-hidden />
+        )}
+      </button>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold text-foreground">{label}</p>
+        <p className="text-[13px] text-muted-foreground" aria-live="polite">
+          {playing ? "녹음을 들려드리고 있어요" : "녹음 00:06 · 눌러서 들어보기"}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 function ReportPage() {
   const aq = calcAQ(scores);
