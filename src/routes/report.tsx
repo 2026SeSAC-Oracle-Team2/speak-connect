@@ -24,11 +24,49 @@ export const Route = createFileRoute("/report")({
 
 const scores: Scores = { spontaneous: 16, comprehension: 8, repetition: 7, naming: 9 };
 
-const rows = [
-  { key: "자발화", score: scores.spontaneous, max: 20, note: "문장의 핵심을 잘 파악했어요." },
-  { key: "이해력", score: scores.comprehension, max: 10, note: "두 번 들으면 더 또렷해져요." },
-  { key: "따라말하기", score: scores.repetition, max: 10, note: "긴 문장에서 잠시 쉬어가면 좋아요." },
-  { key: "이름대기", score: scores.naming, max: 10, note: "사물 이름을 빠르게 떠올리셨어요." },
+type Detail = { q: string; answer: string };
+
+const rows: { key: string; score: number; max: number; note: string; details: Detail[] }[] = [
+  {
+    key: "자발화",
+    score: scores.spontaneous,
+    max: 20,
+    note: "문장의 핵심을 잘 파악했어요.",
+    details: [
+      { q: "카페에서 음료를 주문해 보세요.", answer: "직접 말한 문장" },
+      { q: "음료를 받는 장면을 설명해 주세요.", answer: "직접 말한 문장" },
+    ],
+  },
+  {
+    key: "이해력(알아듣기)",
+    score: scores.comprehension,
+    max: 10,
+    note: "두 번 들으면 더 또렷해져요.",
+    details: [
+      { q: "이 음료는 우유를 넣어 부드러워요.", answer: "우유를 넣어 부드러워요" },
+      { q: "따뜻한 커피 한 잔 주세요.", answer: "따뜻한 커피를 주문했어요" },
+    ],
+  },
+  {
+    key: "따라말하기",
+    score: scores.repetition,
+    max: 10,
+    note: "긴 문장에서 잠시 쉬어가면 좋아요.",
+    details: [
+      { q: "따라 말해 보세요.", answer: "따뜻한 커피 한 잔 주세요." },
+      { q: "따라 말해 보세요.", answer: "네, 여기서 마시고 갈게요." },
+    ],
+  },
+  {
+    key: "이름대기",
+    score: scores.naming,
+    max: 10,
+    note: "사물 이름을 빠르게 떠올리셨어요.",
+    details: [
+      { q: "사진 속 음료의 이름을 말씀해 주세요.", answer: "커피" },
+      { q: "사진 속 물건의 이름을 말씀해 주세요.", answer: "커피잔" },
+    ],
+  },
 ];
 
 const chartData = rows.map((r) => ({ item: r.key, value: (r.score / r.max) * 100 }));
