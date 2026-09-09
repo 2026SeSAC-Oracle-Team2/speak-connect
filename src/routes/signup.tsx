@@ -92,7 +92,7 @@ function SignupPage() {
 
           <legend className="mb-2 text-[15px] font-semibold">성별</legend>
           <div className="flex gap-3">
-            {["여성", "남성", "선택 안 함"].map((g) => (
+            {["여성", "남성"].map((g) => (
               <label
                 key={g}
                 className="flex flex-1 min-h-[52px] cursor-pointer items-center justify-center rounded-2xl border-2 border-border bg-card text-[15px] font-medium has-[:checked]:border-primary has-[:checked]:bg-secondary"
